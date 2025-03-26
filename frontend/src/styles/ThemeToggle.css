@@ -1,35 +1,29 @@
 /* Styles for the ThemeToggle component */
 
 .theme-toggle {
-  background-color: #FFC700;
-  color: white;
-  border: none;
-  padding: 10px;
-  font-size: 1.5rem;
-  border-radius: 50%; /* Make button circular */
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #FFC700;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 40px;
+  height: 40px;
+  font-size: 1.3rem;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 330px;
+  padding: 0;
 }
 
-.light-mode .theme-toggle:hover {
-  background-color: #a96308;
-  transform: scale(1.05);
+.theme-toggle:hover {
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.5);
 }
-
-.dark-mode .theme-toggle:hover {
-  background-color: #e0a551;
-  transform: scale(1.05);
-}
-
 
 .theme-toggle.dark {
-  background-color: #5e12a4;
-  color: #f0f0f0;
+  color: #6529be;
 }
 
 body.dark-mode {
@@ -40,4 +34,11 @@ body.dark-mode {
 body.light-mode {
   background-color: #ffffff;
   color: #333;
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 768px) {
+  .theme-toggle {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  }
 } 

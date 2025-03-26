@@ -35,3 +35,27 @@
 .footer-link:hover{
   color: #00eae2;
 }
+
+/* Mobile responsiveness for footer */
+@media screen and (max-width: 768px) {
+  .footer .container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+  
+  .footer-links {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footer-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .footer {
+    padding: 15px 0;
+  }
+}

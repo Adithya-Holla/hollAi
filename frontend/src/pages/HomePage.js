@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import '../styles/HomePage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import ThemeToggle from '../components/ThemeToggle';
 import { FaChevronDown } from 'react-icons/fa';
 
 function HomePage() {
@@ -20,7 +19,6 @@ function HomePage() {
   return (
     <div className={`home-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <Navbar toggleTheme={toggleTheme} />
-      <ThemeToggle toggleTheme={toggleTheme} />
       <main>
         <section className="hero">
           <video className="hero-video" autoPlay loop muted>

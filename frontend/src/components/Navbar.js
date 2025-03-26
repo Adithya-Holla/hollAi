@@ -1,26 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Navbar.css';
 import ThemeToggle from './ThemeToggle';
+import { FaBars, FaTimes } from 'react-icons/fa';
 
 function Navbar({ toggleTheme }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // Prevent scrolling when menu is open
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <header className="navbar text-white p-4 shadow-lg">
-      <nav className="container mx-auto flex justify-between items-center">
-        <div className="text-2xl font-bold flex-1 text-left">
-          <a href="#home" className=".text-2xl">hollAi</a>
+    <>
+      <div className="navbar-container">
+        <div className="logo">
+          <a href="#home">hollAi</a>
         </div>
-        <ul className="flex space-x-6 justify-center flex-1">
-          <li><a href="#home" className="hover:underline">Home</a></li>
-          <li><a href="#about" className="hover:underline">About</a></li>
-          <li><a href="#projects" className="hover:underline">Projects</a></li>
-          <li><a href="#certifications" className="hover:underline">Certifications</a></li>
-          <li><a href="#contact" className="hover:underline">Contact</a></li>
-        </ul>
-        <div className="flex-1 text-right">
-          <ThemeToggle toggleTheme={toggleTheme} />
+        
+        <div className="controls">
+          <div className="theme-toggle-container">
+            <ThemeToggle toggleTheme={toggleTheme} />
+          </div>
+          
+          <button className="burger-menu" onClick={toggleMenu} aria-label="Toggle menu">
+            {isOpen ? <FaTimes /> : <FaBars />}
+          </button>
         </div>
-      </nav>
-    </header>
+        
+        <div className={`menu-container ${isOpen ? 'active' : ''}`}>
+          <ul className="nav-links">
+            <li><a href="#home" onClick={toggleMenu}>Home</a></li>
+            <li><a href="#about" onClick={toggleMenu}>About</a></li>
+            <li><a href="#projects" onClick={toggleMenu}>Projects</a></li>
+            <li><a href="#certifications" onClick={toggleMenu}>Certifications</a></li>
+            <li><a href="#contact" onClick={toggleMenu}>Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      {isOpen && <div className="overlay" onClick={toggleMenu}></div>}
+    </>
   );
 }
 
