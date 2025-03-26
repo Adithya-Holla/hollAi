@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/Navbar.css';
 import ThemeToggle from './ThemeToggle';
 
-function Navbar() {
+function Navbar({ toggleTheme }) {
   return (
     <header className="navbar text-white p-4 shadow-lg">
       <nav className="container mx-auto flex justify-between items-center">
@@ -17,7 +17,7 @@ function Navbar() {
           <li><a href="#contact" className="hover:underline">Contact</a></li>
         </ul>
         <div className="flex-1 text-right">
-          <ThemeToggle />
+          <ThemeToggle toggleTheme={toggleTheme} />
         </div>
       </nav>
     </header>

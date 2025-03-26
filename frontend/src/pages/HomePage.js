@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import '../styles/HomePage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ThemeToggle from '../components/ThemeToggle';
+import { FaChevronDown } from 'react-icons/fa';
 
 function HomePage() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const projectsRef = useRef(null);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const scrollToProjects = () => {
+    projectsRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <div className="home-page">
-      <Navbar />
-      <ThemeToggle />
+    <div className={`home-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+      <Navbar toggleTheme={toggleTheme} />
+      <ThemeToggle toggleTheme={toggleTheme} />
       <main>
         <section className="hero">
           <video className="hero-video" autoPlay loop muted>
@@ -21,8 +33,11 @@ function HomePage() {
             <button className="hero-button">My Projects</button>
             <button className="hero-button">Contact Me</button>
           </div>
+          <button className="scroll-down-button" onClick={scrollToProjects}>
+            <FaChevronDown />
+          </button>
         </section>
-        <section className="projects-section">
+        <section className="projects-section" ref={projectsRef}>
           <h2 className="projects-title">My Recent Projects</h2>
           <div className="projects">
             <div className="project-card">

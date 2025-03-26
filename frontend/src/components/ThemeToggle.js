@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/ThemeToggle.css';
 import { FaSun, FaMoon } from 'react-icons/fa';
 
-function ThemeToggle() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+function ThemeToggle({ toggleTheme }) {
+  const [isDark, setIsDark] = useState(false);
 
-  useEffect(() => {
-    document.body.classList.toggle('dark-mode', isDarkMode);
-    document.body.classList.toggle('light-mode', !isDarkMode);
-  }, [isDarkMode]);
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
+  const handleToggle = () => {
+    setIsDark(!isDark);
+    if (toggleTheme && typeof toggleTheme === 'function') {
+      toggleTheme();
+    }
   };
 
   return (
-    <button className={`theme-toggle ${isDarkMode ? 'dark' : 'light'}`} onClick={toggleTheme}>
-      {isDarkMode ? <FaMoon /> : <FaSun />}
+    <button 
+      className={`theme-toggle ${isDark ? 'dark' : 'light'}`} 
+      onClick={handleToggle}
+    >
+      {isDark ? <FaMoon /> : <FaSun />}
     </button>
   );
 }
