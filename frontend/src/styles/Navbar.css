@@ -1,0 +1,55 @@
+/* Basic styles for the Navbar component */
+
+.navbar {
+  padding: 12px 24px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  margin-left:30px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  transition: text-decoration 0.3s;
+  font-size: 1.1rem;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+.navbar .text-2xl a {
+  font-size: 1.5rem; /* Increase font size for 'hollAi' */
+}
+
+.light-mode .navbar .text-2xl a {
+  color: #FFC700;
+  text-decoration: none;
+}
+
+.dark-mode .navbar .text-2xl a {
+  color: #6529be;
+  text-decoration: none;
+}
+
+.light-mode .navbar {
+  background-color: #48A6A7; /* ocean blue */
+  color: white;
+}
+
+.dark-mode .navbar {
+  background-color: #135D66; /* ocean blue */
+  color: white;
+}
