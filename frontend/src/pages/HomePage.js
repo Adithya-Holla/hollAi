@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/HomePage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -23,8 +24,8 @@ function HomePage({ isDarkMode, toggleTheme }) {
           <h1 className="hero-text">Explore<br /><span className="highlight">hollAi</span></h1>
           <p className="tagline">Where hardwork meets intelligence</p>
           <div className="hero-buttons">
-            <button className="hero-button">My Projects</button>
-            <button className="hero-button">Contact Me</button>
+            <Link to="/projects" className="hero-button">My Projects</Link>
+            <Link to="/contact" className="hero-button">Contact Me</Link>
           </div>
           <button className="scroll-down-button" onClick={scrollToProjects}>
             <FaChevronDown />
@@ -51,6 +52,9 @@ function HomePage({ isDarkMode, toggleTheme }) {
               <p>Description of project 3.</p>
               <a href="https://project3.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
+          </div>
+          <div className="view-all-projects">
+            <Link to="/projects" className="view-all-button">View All Projects</Link>
           </div>
         </section>
       </main>
