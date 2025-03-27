@@ -1,16 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import '../styles/HomePage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { FaChevronDown } from 'react-icons/fa';
 
-function HomePage() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+function HomePage({ isDarkMode, toggleTheme }) {
   const projectsRef = useRef(null);
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
 
   const scrollToProjects = () => {
     projectsRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -39,19 +34,19 @@ function HomePage() {
           <h2 className="projects-title">My Recent Projects</h2>
           <div className="projects">
             <div className="project-card">
-              <img src="/path/to/image1.jpg" alt="Project 1" className="project-image" />
+              <img src="/images/braintumor.png" alt="Project 1" className="project-image" />
               <h3>Project 1</h3>
               <p>Description of project 1.</p>
               <a href="https://project1.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
             <div className="project-card">
-              <img src="/path/to/image2.jpg" alt="Project 2" className="project-image" />
+              <img src="/images/project2.jpg" alt="Project 2" className="project-image" />
               <h3>Project 2</h3>
               <p>Description of project 2.</p>
               <a href="https://project2.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
             <div className="project-card">
-              <img src="/path/to/image3.jpg" alt="Project 3" className="project-image" />
+              <img src="/images/project3.jpg" alt="Project 3" className="project-image" />
               <h3>Project 3</h3>
               <p>Description of project 3.</p>
               <a href="https://project3.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>

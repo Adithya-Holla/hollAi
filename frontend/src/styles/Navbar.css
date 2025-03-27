@@ -114,6 +114,23 @@
   transform: translateX(5px);
 }
 
+.nav-links a.active {
+  color: #9333ea;
+  font-weight: bold;
+  position: relative;
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background-color: #9333ea;
+}
+
 .overlay {
   position: fixed;
   top: 0;

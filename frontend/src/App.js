@@ -1,14 +1,23 @@
-import React from 'react';
-import Header from './components/Header';
-import Projects from './components/Projects';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/HomePage';
-
-// Removed HomePage component to move it to a separate file in the components directory.
+import AboutPage from './pages/AboutPage';
 
 function App() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   return (
-    <HomePage />
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
+        <Route path="/about" element={<AboutPage isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
+      </Routes>
+    </Router>
   );
 }
 
