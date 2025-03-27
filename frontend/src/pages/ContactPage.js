@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/ContactPage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaGithub, FaLinkedin } from 'react-icons/fa';
 
 function ContactPage({ isDarkMode, toggleTheme }) {
   const [formData, setFormData] = useState({
@@ -12,11 +12,9 @@ function ContactPage({ isDarkMode, toggleTheme }) {
     message: ''
   });
   
-  const [formStatus, setFormStatus] = useState({
-    submitted: false,
-    success: false,
-    message: ''
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,45 +24,53 @@ function ContactPage({ isDarkMode, toggleTheme }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Basic validation
     if (!formData.name || !formData.email || !formData.message) {
-      setFormStatus({
-        submitted: true,
-        success: false,
-        message: 'Please fill in all required fields.'
-      });
+      setError('Please fill in all required fields.');
       return;
     }
     
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      setFormStatus({
-        submitted: true,
-        success: false,
-        message: 'Please enter a valid email address.'
-      });
+      setError('Please enter a valid email address.');
       return;
     }
-    
-    // In a real application, you would send this data to a server
-    // For now, we'll just simulate a successful submission
-    setFormStatus({
-      submitted: true,
-      success: true,
-      message: 'Thanks for your message! I\'ll get back to you soon.'
-    });
-    
-    // Reset form after successful submission
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    });
+
+    setIsSubmitting(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const response = await fetch('https://hollai-backend.vercel.app/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      setSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -82,7 +88,7 @@ function ContactPage({ isDarkMode, toggleTheme }) {
               </div>
               <div className="info-content">
                 <h3>Email</h3>
-                <p><a href="mailto:hello@hollai.com">hello@hollai.com</a></p>
+                <p><a href="mailto:adithyavholla23@gmail.com">adithyavholla23@gmail.com</a></p>
               </div>
             </div>
             
@@ -92,7 +98,7 @@ function ContactPage({ isDarkMode, toggleTheme }) {
               </div>
               <div className="info-content">
                 <h3>Phone</h3>
-                <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+                <p><a href="tel:+1234567890">+91 9404110669</a></p>
               </div>
             </div>
             
@@ -102,21 +108,18 @@ function ContactPage({ isDarkMode, toggleTheme }) {
               </div>
               <div className="info-content">
                 <h3>Location</h3>
-                <p>San Francisco, CA</p>
+                <p>Bengalru, Karnataka</p>
               </div>
             </div>
             
             <div className="social-media">
               <h3>Connect with Me</h3>
               <div className="social-icons">
-                <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" className="social-icon">
+                <a href="https://github.com/Adithya-Holla" target="_blank" rel="noopener noreferrer" className="social-icon">
                   <FaGithub />
                 </a>
-                <a href="https://linkedin.com/in/your-username" target="_blank" rel="noopener noreferrer" className="social-icon">
+                <a href="https://www.linkedin.com/in/adiholla/" target="_blank" rel="noopener noreferrer" className="social-icon">
                   <FaLinkedin />
-                </a>
-                <a href="https://twitter.com/your-username" target="_blank" rel="noopener noreferrer" className="social-icon">
-                  <FaTwitter />
                 </a>
               </div>
             </div>
@@ -124,12 +127,6 @@ function ContactPage({ isDarkMode, toggleTheme }) {
           
           <div className="contact-form-container">
             <h2>Send a Message</h2>
-            
-            {formStatus.submitted && (
-              <div className={`form-message ${formStatus.success ? 'success' : 'error'}`}>
-                {formStatus.message}
-              </div>
-            )}
             
             <form className="contact-form" onSubmit={handleSubmit}>
               <div className="form-group">
@@ -183,10 +180,26 @@ function ContactPage({ isDarkMode, toggleTheme }) {
                 ></textarea>
               </div>
               
-              <button type="submit" className="submit-button">
-                Send Message
+              <button 
+                type="submit" 
+                className="submit-button"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
+            
+            {error && (
+              <div className="form-message error">
+                {error}
+              </div>
+            )}
+            
+            {success && (
+              <div className="form-message success">
+                Thanks for your message! I'll get back to you soon.
+              </div>
+            )}
           </div>
         </div>
       </main>

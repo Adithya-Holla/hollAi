@@ -36,20 +36,20 @@ function HomePage({ isDarkMode, toggleTheme }) {
           <div className="projects">
             <div className="project-card">
               <img src="/images/braintumor.png" alt="Project 1" className="project-image" />
-              <h3>Project 1</h3>
-              <p>Description of project 1.</p>
-              <a href="https://project1.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
+              <h3 className="proj-title">TumorDetect</h3>
+              <p className='proj-desc'>Detecting and classifying brain tumor using Ai</p>
+              <a href="https://cruxtumor.netlify.app" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
             <div className="project-card">
-              <img src="/images/project2.jpg" alt="Project 2" className="project-image" />
-              <h3>Project 2</h3>
-              <p>Description of project 2.</p>
+              <img src="/images/braintumor.png" alt="Project 2" className="project-image" />
+              <h3 className='proj-title'>Project 2</h3>
+              <p className='proj-desc'>Description of project 2.</p>
               <a href="https://project2.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
             <div className="project-card">
-              <img src="/images/project3.jpg" alt="Project 3" className="project-image" />
-              <h3>Project 3</h3>
-              <p>Description of project 3.</p>
+              <img src="/images/braintumor.png" alt="Project 3" className="project-image" />
+              <h3 className='proj-title'>Project 3</h3>
+              <p className='proj-desc'>Description of project 3.</p>
               <a href="https://project3.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
           </div>
