@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/ProjectsPage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaGithub, FaExternalLinkAlt, FaBrain, FaComment, FaHome, FaChartBar, FaUserCircle, FaDrone } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaBrain, FaComment, FaHome, FaChartBar, FaUserCircle, FaRobot } from 'react-icons/fa';
 
 function ProjectsPage({ isDarkMode, toggleTheme }) {
   const projects = [
@@ -55,7 +55,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
       id: 6,
       title: 'Autonomous Drone Navigation',
       description: 'A system that enables drones to navigate autonomously in complex environments using computer vision and reinforcement learning algorithms.',
-      icon: <FaDrone />,
+      icon: <FaRobot />,
       technologies: ['Python', 'PyTorch', 'ROS', 'OpenCV'],
       github: 'https://github.com/yourusername/autonomous-drone',
       demo: 'https://autonomous-drone-demo.com'
