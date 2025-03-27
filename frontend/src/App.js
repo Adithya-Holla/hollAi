@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ProjectsPage from './pages/ProjectsPage';
 import CertificationsPage from './pages/CertificationsPage';
+import ContactPage from './pages/ContactPage';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -20,6 +21,7 @@ function App() {
         <Route path="/about" element={<AboutPage isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
         <Route path="/projects" element={<ProjectsPage isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
         <Route path="/certifications" element={<CertificationsPage isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
+        <Route path="/contact" element={<ContactPage isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
       </Routes>
     </Router>
   );
