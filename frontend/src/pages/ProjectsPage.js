@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/ProjectsPage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaBrain, FaComment, FaHome, FaChartBar, FaUserCircle, FaDrone } from 'react-icons/fa';
 
 function ProjectsPage({ isDarkMode, toggleTheme }) {
   const projects = [
@@ -10,7 +10,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
       id: 1,
       title: 'Brain Tumor Detection',
       description: 'An AI-powered system that can detect and classify brain tumors from MRI scans with high accuracy. Built using deep learning techniques and convolutional neural networks.',
-      image: '/images/braintumor.png',
+      icon: <FaBrain />,
       technologies: ['Python', 'TensorFlow', 'Keras', 'OpenCV'],
       github: 'https://github.com/yourusername/brain-tumor-detection',
       demo: 'https://brain-tumor-detection-demo.com'
@@ -19,7 +19,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
       id: 2,
       title: 'Sentiment Analysis Tool',
       description: 'A natural language processing tool that analyzes text data to determine sentiment and emotional tone. Useful for analyzing customer feedback and social media mentions.',
-      image: '/images/project2.jpg',
+      icon: <FaComment />,
       technologies: ['Python', 'NLTK', 'Scikit-learn', 'Flask'],
       github: 'https://github.com/yourusername/sentiment-analysis',
       demo: 'https://sentiment-analysis-demo.com'
@@ -28,7 +28,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
       id: 3,
       title: 'Smart Home Automation',
       description: 'An IoT system that allows users to control and automate their home devices through a mobile app. Features include voice control, scheduling, and energy usage monitoring.',
-      image: '/images/project3.jpg',
+      icon: <FaHome />,
       technologies: ['JavaScript', 'React Native', 'Node.js', 'MongoDB'],
       github: 'https://github.com/yourusername/smart-home',
       demo: 'https://smart-home-demo.com'
@@ -37,7 +37,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
       id: 4,
       title: 'Recommendation Engine',
       description: 'A machine learning-based recommendation system that suggests products or content based on user preferences and behavior. Implemented collaborative filtering algorithms.',
-      image: '/images/project1.jpg',
+      icon: <FaChartBar />,
       technologies: ['Python', 'Pandas', 'Scikit-learn', 'Django'],
       github: 'https://github.com/yourusername/recommendation-engine',
       demo: 'https://recommendation-engine-demo.com'
@@ -46,7 +46,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
       id: 5,
       title: 'Facial Recognition System',
       description: 'A computer vision application that can detect and recognize faces in images and videos. Uses deep learning models to achieve high accuracy in various lighting conditions.',
-      image: '/images/project2.jpg',
+      icon: <FaUserCircle />,
       technologies: ['Python', 'TensorFlow', 'OpenCV', 'Flask'],
       github: 'https://github.com/yourusername/facial-recognition',
       demo: 'https://facial-recognition-demo.com'
@@ -55,7 +55,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
       id: 6,
       title: 'Autonomous Drone Navigation',
       description: 'A system that enables drones to navigate autonomously in complex environments using computer vision and reinforcement learning algorithms.',
-      image: '/images/project3.jpg',
+      icon: <FaDrone />,
       technologies: ['Python', 'PyTorch', 'ROS', 'OpenCV'],
       github: 'https://github.com/yourusername/autonomous-drone',
       demo: 'https://autonomous-drone-demo.com'
@@ -72,8 +72,10 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
         <div className="projects-grid">
           {projects.map((project) => (
             <div key={project.id} className="project-card">
-              <div className="project-image-container">
-                <img src={project.image} alt={project.title} className="project-image" />
+              <div className="project-icon-container">
+                <div className="project-icon">
+                  {project.icon}
+                </div>
               </div>
               <div className="project-content">
                 <h2 className="project-title">{project.title}</h2>
