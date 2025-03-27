@@ -1,5 +1,41 @@
 /* Styles for the ThemeToggle component */
 
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 199, 0, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 199, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 199, 0, 0);
+  }
+}
+
+@keyframes pulsePurple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(101, 41, 190, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(101, 41, 190, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(101, 41, 190, 0);
+  }
+}
+
 .theme-toggle {
   background-color: rgba(0, 0, 0, 0.3);
   color: #FFC700;
@@ -15,11 +51,38 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .theme-toggle:hover {
   transform: scale(1.1);
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.theme-toggle:active {
+  animation: rotate 0.5s ease-in-out;
+}
+
+.theme-toggle.light:active {
+  animation: pulse 0.5s;
+}
+
+.theme-toggle.dark:active {
+  animation: pulsePurple 0.5s;
+}
+
+/* Animation class that can be added programmatically */
+.theme-toggle.animate {
+  animation: rotate 0.5s ease-in-out;
+}
+
+.theme-toggle.light.animate {
+  animation: pulse 0.5s, rotate 0.5s ease-in-out;
+}
+
+.theme-toggle.dark.animate {
+  animation: pulsePurple 0.5s, rotate 0.5s ease-in-out;
 }
 
 .theme-toggle.dark {
