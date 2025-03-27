@@ -36,6 +36,32 @@
   color: #00eae2;
 }
 
+/* Social media section */
+.social-media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.social-icons_footer {
+  display: flex;
+  gap: 15px;
+  margin-left: 100px;
+  margin-bottom: 20px;
+}
+
+.social-icon_footer {
+  color: #f0f0f0;
+  font-size: 1.8rem;
+  transition: color 0.3s, transform 0.2s;
+}
+
+.social-icon_footer:hover {
+  color: #8a2be2;
+  transform: translateY(-2px);
+}
+
 /* Mobile responsiveness for footer */
 @media screen and (max-width: 768px) {
   .footer .container {

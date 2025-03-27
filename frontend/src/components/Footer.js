@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/Footer.css';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 
 function Footer() {
   return (
@@ -8,9 +9,15 @@ function Footer() {
         <div className="text-2xl font-bold">
           <a href="#home" className="footer-link-name">hollAi</a>
         </div>
-        <div className="footer-links">
-          <a href="https://www.linkedin.com/in/adithya-holla-05b185291/" target="_blank" rel="noopener noreferrer" className="footer-link">LinkedIn</a>
-          <a href="mailto:adithyavholla23@gmail.com" className="footer-link">Email</a>
+        <div className="social-media">
+          <div className="social-icons_footer">
+            <a href="https://github.com/Adithya-Holla" target="_blank" rel="noopener noreferrer" className="social-icon_footer">
+              <FaGithub />
+            </a>
+            <a href="https://www.linkedin.com/in/adiholla/" target="_blank" rel="noopener noreferrer" className="social-icon_footer">
+              <FaLinkedin />
+            </a>
+          </div>
         </div>
         <p>&copy; 2025 hollAi. All rights reserved.</p>
       </div>

@@ -11,7 +11,7 @@
 }
 
 .projects-page.light-mode {
-  background-color: #f5f5f5;
+  background-color: #dddbdb;
   color: #333;
 }
 
@@ -55,10 +55,10 @@
 .project-card {
   border-radius: 12px;
   overflow: hidden;
-  height: 100%;
+  height: 520px; /* Fixed height for all cards */
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: #cbcaca;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -69,7 +69,7 @@
 }
 
 .light-mode .project-card {
-  background-color: #fff;
+  background-color: #efe9e9;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -90,6 +90,7 @@
 .project-image-container {
   height: 200px;
   overflow: hidden;
+  position: relative;
 }
 
 .project-image {
@@ -101,41 +102,6 @@
 
 .project-card:hover .project-image {
   transform: scale(1.05);
-}
-
-/* New icon-based styles */
-.project-icon-container {
-  height: 160px;
-  position: relative;
-  overflow: hidden;
-  background-color: #f0f0f0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.dark-mode .project-icon-container {
-  background-color: #2a2a2a;
-}
-
-.project-icon {
-  font-size: 5rem;
-  color: #8a2be2;
-  opacity: 0.6;
-  transition: transform 0.3s, opacity 0.3s;
-}
-
-.light-mode .project-icon {
-  color: #FFC700;
-}
-
-.dark-mode .project-icon {
-  color: #b388ff;
-}
-
-.project-card:hover .project-icon {
-  transform: scale(1.1);
-  opacity: 0.8;
 }
 
 .project-content {
@@ -160,7 +126,12 @@
   line-height: 1.5;
   margin-bottom: 1.25rem;
   color: #555;
-  flex-grow: 1;
+  height: 80px; /* Fixed height */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Number of lines to show */
+  -webkit-box-orient: vertical;
 }
 
 .dark-mode .project-description {
@@ -176,6 +147,7 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 1.25rem;
+  min-height: 30px; /* Minimum height for tech tags */
 }
 
 .tech-tag {
