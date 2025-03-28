@@ -137,7 +137,7 @@ function AboutPage({ isDarkMode, toggleTheme }) {
                     id="content-whoIAm"
                   >
                     <p>
-                      Hello! I'm Aidthya V Holla, a passionate developer with expertise in artificial intelligence and machine learning.
+                      Hello! I'm Adithya V Holla, a passionate developer with expertise in artificial intelligence and machine learning.
                       My journey in technology began with a curiosity about how computers could be taught to learn and
                       make decisions like humans.
                     </p>
