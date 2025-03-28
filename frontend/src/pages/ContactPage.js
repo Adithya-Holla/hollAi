@@ -73,7 +73,7 @@ function ContactPage({ isDarkMode, toggleTheme }) {
                 <a href="https://github.com/Adithya-Holla" target="_blank" rel="noopener noreferrer" className="social-icon">
                   <FaGithub />
                 </a>
-                <a href="https://github.com/Adithya-Holla" target="_blank" rel="noopener noreferrer" className="social-icon">
+                <a href="https://www.linkedin.com/in/adiholla/" target="_blank" rel="noopener noreferrer" className="social-icon">
                   <FaLinkedin />
                 </a>
               </div>
