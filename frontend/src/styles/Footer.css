@@ -73,6 +73,10 @@
   .footer-links {
     margin-left: 0;
   }
+
+  .social-icons_footer {
+    margin-left: 50px; /* Reduced margin for tablets */
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -83,5 +87,9 @@
   
   .footer {
     padding: 15px 0;
+  }
+
+  .social-icons_footer {
+    margin-left: 20px; /* Further reduced margin for mobile */
   }
 }
