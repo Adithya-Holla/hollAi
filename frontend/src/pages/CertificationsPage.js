@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/CertificationsPage.css';
+import { FaGraduationCap } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaExternalLinkAlt, FaCheckCircle, FaMedal, FaCertificate, FaAward } from 'react-icons/fa';
+import '../styles/CertificationsPage.css';
 
 function CertificationsPage({ isDarkMode, toggleTheme }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -16,8 +16,6 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
     return () => clearTimeout(timer);
   }, []);
 
-  const certifications = [];
-
   return (
     <div className={`certifications-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <Navbar toggleTheme={toggleTheme} />
@@ -26,6 +24,7 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
         <p className="certifications-subtitle">Credentials validating my expertise in AI and machine learning</p>
         
         <div className="no-certifications">
+          <FaGraduationCap className="no-certifications-icon" />
           <p>No certifications available at the moment.</p>
         </div>
       </main>

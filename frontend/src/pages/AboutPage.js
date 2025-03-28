@@ -64,7 +64,7 @@ function AboutPage({ isDarkMode, toggleTheme }) {
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [handleScroll]);
 
   const toggleSection = (section) => {
     if (activeSection === section) {
@@ -107,7 +107,7 @@ function AboutPage({ isDarkMode, toggleTheme }) {
                     <img src="/images/profile-image.png" alt="Profile" className="about-image" />
                   </div>
                   <div className="flip-card-back">
-                    <h3>Adithya Holla</h3>
+                    <h3>Adithya V Holla</h3>
                     <p>AI Developer & Enthusiast</p>
                     <p>Click to flip</p>
                   </div>
@@ -137,7 +137,7 @@ function AboutPage({ isDarkMode, toggleTheme }) {
                     id="content-whoIAm"
                   >
                     <p>
-                      Hello! I'm a passionate developer with expertise in artificial intelligence and machine learning.
+                      Hello! I'm Aidthya V Holla, a passionate developer with expertise in artificial intelligence and machine learning.
                       My journey in technology began with a curiosity about how computers could be taught to learn and
                       make decisions like humans.
                     </p>
@@ -194,6 +194,33 @@ function AboutPage({ isDarkMode, toggleTheme }) {
                   </div>
                 </div>
                 
+                <div className="accordion-item">
+                  <div 
+                    className={`accordion-header ${activeSection === 'education' ? 'active' : ''}`} 
+                    onClick={() => toggleSection('education')}
+                    onKeyDown={(e) => e.key === 'Enter' && toggleSection('education')}
+                    tabIndex={0}
+                    role="button"
+                    aria-expanded={activeSection === 'education'}
+                    aria-controls="content-education"
+                  >
+                    <h2>My Education</h2>
+                    <span className="accordion-icon">{activeSection === 'education' ? '−' : '+'}</span>
+                  </div>
+                  <div 
+                    className={`accordion-content ${activeSection === 'education' ? 'active' : ''}`}
+                    id="content-education"
+                  >
+                    <p>
+                      Currently persuing Btech degree from PES University, RR campur, Banglore, Karnataka, India.
+                      <br /><br />
+                      Excelled in Creative PU College, with an amazing 98% in boards and 201 rank in KCET.
+                      <br /><br />
+                      Qualified SSLC from The Rosary High School, Bambolim, Goa with an astonishing 90.8%.
+                    </p>
+                  </div>
+                </div>
+
                 <div className="accordion-item">
                   <div 
                     className={`accordion-header ${activeSection === 'connect' ? 'active' : ''}`} 
