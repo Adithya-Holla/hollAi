@@ -279,7 +279,7 @@
 .scroll-down-button {
   position: absolute;
   bottom: 50px;
-  left: 50%;
+  left: 49%;
   transform: translateX(-50%);
   border: 2px solid #ffffff;
   color: #ffffff;
@@ -294,10 +294,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   z-index: 10;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.8s ease forwards;
-  animation-delay: 0.8s;
 }
 
 .scroll-down-button:hover {
@@ -377,9 +373,11 @@
 
   .scroll-down-button {
     bottom: 30px;
+    left: 45%;
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
+    transform: translateX(-85%); /* Increased left offset from -70% to -85% */
   }
 }
 
@@ -412,6 +410,10 @@
   .project-card {
     height: 380px; /* Slightly smaller height for very small screens */
     transform: translateX(-30px); /* Even less left movement on very small screens */
+  }
+
+  .scroll-down-button {
+    transform: translateX(-95%); /* Increased left offset from -80% to -95% */
   }
 }
 
