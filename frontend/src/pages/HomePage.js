@@ -28,7 +28,7 @@ function HomePage({ isDarkMode, toggleTheme }) {
       <main>
         <section className="hero">
           <video className="hero-video" autoPlay loop muted>
-            <source src="https://cdn.pixabay.com/video/2024/03/29/206132.mp4" type="video/mp4" />
+            <source src="/hero-background.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <h1 className={`hero-text ${heroVisible ? 'animate-hero' : ''}`}>Explore<br /><span className="highlight">hollAi</span></h1>
@@ -45,22 +45,10 @@ function HomePage({ isDarkMode, toggleTheme }) {
           <h2 className="projects-title">My Recent Projects</h2>
           <div className="projects">
             <div className="project-card">
-              <img src="/images/braintumor.png" alt="Project 1" className="project-image" />
-              <h3>TumorDetect</h3>
-              <p>Detecting and classifying brain tumors from MRI scans with high accuracy.</p>
+              <img src="/images/braintumor.png" alt="Brain Tumor Detection" className="project-image" />
+              <h3>Brain Tumor Detection</h3>
+              <p>An AI-powered system that can detect and classify brain tumors from MRI scans with high accuracy.</p>
               <a href="https://cruxtumor.netlify.app" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
-            </div>
-            <div className="project-card">
-              <img src="/images/project2.jpg" alt="Project 2" className="project-image" />
-              <h3>Project 2</h3>
-              <p>Description of project 2.</p>
-              <a href="https://project2.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
-            </div>
-            <div className="project-card">
-              <img src="/images/project3.jpg" alt="Project 3" className="project-image" />
-              <h3>Project 3</h3>
-              <p>Description of project 3.</p>
-              <a href="https://project3.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
           </div>
           <div className="view-all-projects">

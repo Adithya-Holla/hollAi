@@ -70,10 +70,13 @@
 
 .projects {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   gap: 40px;
   position: relative;
   z-index: 5;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .project-card {
@@ -83,16 +86,20 @@
   border-radius: 15px;
   padding: 20px;
   width: 350px;
-  height: 400px; /* Fixed height for all cards */
+  height: 400px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: white; /* Ensure text is white for visibility */
-  position: relative; /* For absolute positioning of link */
+  color: white;
+  position: relative;
+  margin: 0 auto;
+  transform: translateX(-100px); /* Move the card to the left */
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.3s;
 }
-
 
 .project-card:hover {
   transform: translateY(-10px);
@@ -287,11 +294,10 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   z-index: 10;
-}
-
-.scroll-down-button.animate-hero {
-  animation: bounce 2s infinite;
-  animation-delay: 1s;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.8s;
 }
 
 .scroll-down-button:hover {
@@ -322,6 +328,17 @@
   }
   60% {
     transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -372,13 +389,12 @@
     flex-direction: column;
     align-items: center;
     gap: 30px;
-    padding: 0 20px;
   }
-
+  
   .project-card {
-    width: 90%;
-    max-width: 400px;
-    height: 400px; /* Maintain fixed height */
+    width: 100%;
+    max-width: 350px;
+    transform: translateX(-50px); /* Less left movement on mobile */
   }
 }
 
@@ -395,6 +411,7 @@
   
   .project-card {
     height: 380px; /* Slightly smaller height for very small screens */
+    transform: translateX(-30px); /* Even less left movement on very small screens */
   }
 }
 
@@ -480,42 +497,48 @@
 .hero-text, .tagline, .hero-buttons, .scroll-down-button {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  animation: fadeInUp 0.8s ease forwards;
 }
 
-.hero-text.animate-hero {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.2s;
+.hero-text {
+  animation-delay: 0.2s;
 }
 
-.tagline.animate-hero {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.4s;
+.tagline {
+  animation-delay: 0.4s;
 }
 
-.hero-buttons.animate-hero {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.6s;
+.hero-buttons {
+  animation-delay: 0.6s;
 }
 
-.scroll-down-button.animate-hero {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.8s;
+.scroll-down-button {
+  animation-delay: 0.8s;
 }
 
 /* Button animation */
 .animate-hero .first-button {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.7s, 0.7s, 0s, 0s, 0s, 0s; /* Delay only for opacity and transform */
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.7s;
 }
 
 .animate-hero .second-button {
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.9s;
+}
+
+/* Project card animation */
+.project-card {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.3s;
+}
+
+/* Remove the old transition-based animations */
+.hero-text.animate-hero,
+.tagline.animate-hero,
+.hero-buttons.animate-hero,
+.scroll-down-button.animate-hero {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.9s, 0.9s, 0s, 0s, 0s, 0s; /* Delay only for opacity and transform */
 }

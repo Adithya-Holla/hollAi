@@ -21,10 +21,11 @@ function AboutPage({ isDarkMode, toggleTheme }) {
   const isInViewport = (element) => {
     if (!element) return false;
     const rect = element.getBoundingClientRect();
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
     return (
-      rect.top >= 0 &&
+      rect.top <= windowHeight * 0.8 && // More lenient top check
+      rect.bottom >= 0 &&
       rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
   };
@@ -36,15 +37,11 @@ function AboutPage({ isDarkMode, toggleTheme }) {
     }
     
     if (profileRef.current && !visibleElements.profile && isInViewport(profileRef.current)) {
-      setTimeout(() => {
-        setVisibleElements(prev => ({ ...prev, profile: true }));
-      }, 150);
+      setVisibleElements(prev => ({ ...prev, profile: true }));
     }
     
     if (accordionRef.current && !visibleElements.accordion && isInViewport(accordionRef.current)) {
-      setTimeout(() => {
-        setVisibleElements(prev => ({ ...prev, accordion: true }));
-      }, 300);
+      setVisibleElements(prev => ({ ...prev, accordion: true }));
     }
   };
 
@@ -52,6 +49,10 @@ function AboutPage({ isDarkMode, toggleTheme }) {
     // Add initial fade-in animation
     const timer = setTimeout(() => {
       setIsVisible(true);
+      // Set accordion visible immediately on mobile
+      if (window.innerWidth <= 768) {
+        setVisibleElements(prev => ({ ...prev, accordion: true }));
+      }
     }, 50);
     
     // Add scroll event listener
