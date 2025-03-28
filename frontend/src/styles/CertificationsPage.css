@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .certifications-page.dark-mode {
@@ -22,6 +22,14 @@
   margin: 0 auto;
   width: 100%;
   padding-top: 80px; /* Account for fixed navbar */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.certifications-container.fade-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .certifications-title {
@@ -29,6 +37,7 @@
   margin-bottom: 0.5rem;
   text-align: center;
   font-weight: bold;
+  animation: fadeInDown 0.8s ease-out;
 }
 
 .certifications-subtitle {
@@ -36,6 +45,7 @@
   text-align: center;
   margin-bottom: 3rem;
   color: #666;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .dark-mode .certifications-subtitle {
@@ -79,6 +89,7 @@
 /* Featured certifications */
 .featured-certifications {
   margin-bottom: 4rem;
+  animation: fadeIn 1s ease-out;
 }
 
 .featured-grid {
@@ -88,7 +99,7 @@
 }
 
 .featured-card {
-  background-color: #fff;
+  background-color: rgba(165, 127, 202, 0.5);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -96,6 +107,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
 }
 
 .dark-mode .featured-card {
@@ -343,6 +356,8 @@
 }
 
 .timeline-card {
+  display: flex;
+  align-items: flex-start;
   position: relative;
   margin-left: 48px;
   margin-bottom: 2rem;
@@ -350,6 +365,8 @@
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  animation: fadeInLeft 0.6s ease-out forwards;
 }
 
 .dark-mode .timeline-card {
@@ -530,4 +547,53 @@
   .cert-timeline::before {
     left: 15px;
   }
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.all-certifications {
+  animation: fadeIn 1s ease-out;
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
 } 

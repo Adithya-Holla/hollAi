@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .projects-page.dark-mode {
@@ -11,7 +11,7 @@
 }
 
 .projects-page.light-mode {
-  background-color: #dddbdb;
+  background-color: #ffffff;
   color: #333;
 }
 
@@ -22,6 +22,14 @@
   margin: 0 auto;
   width: 100%;
   padding-top: 80px; /* Account for fixed navbar */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.projects-container.fade-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .projects-title {
@@ -29,6 +37,7 @@
   margin-bottom: 0.5rem;
   text-align: center;
   font-weight: bold;
+  animation: fadeInDown 0.8s ease-out;
 }
 
 .projects-subtitle {
@@ -36,6 +45,7 @@
   text-align: center;
   margin-bottom: 3rem;
   color: #666;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .dark-mode .projects-subtitle {
@@ -58,9 +68,10 @@
   height: 520px; /* Fixed height for all cards */
   display: flex;
   flex-direction: column;
-  background-color: #cbcaca;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
 }
 
 .dark-mode .project-card {
@@ -69,7 +80,7 @@
 }
 
 .light-mode .project-card {
-  background-color: #efe9e9;
+  background-color: rgba(165, 127, 202, 0.5);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -77,10 +88,6 @@
   color: #333;
 }
 
-.light-mode .project-link {
-  border-color: #FFC700;
-  color: #FFC700;
-}
 
 .project-card:hover {
   transform: translateY(-8px);
@@ -168,6 +175,7 @@
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+  margin-left: 30px;
 }
 
 .project-link {
@@ -192,21 +200,26 @@
 }
 
 .light-mode .project-link {
-  color: #FFC700;
+  color: #ffffff;
+  background-color: #FFC700;
   border-color: #FFC700;
 }
 
-.light-mode .project-link:hover {
-  background-color: rgba(255, 199, 0, 0.1);
+.light-mode .project-link:hover{
+  transform: scale(1.05);
+  color: #ffffff;
 }
 
 .dark-mode .project-link {
-  color: #b388ff;
+  color: #ffffff;
   border-color: #b388ff;
+  background-color: #b388ff;
 }
 
 .dark-mode .project-link:hover {
-  background-color: rgba(179, 136, 255, 0.1);
+  transform: scale(1.05);
+  color: #ffffff;
+  background-color: #b388ff;
 }
 
 @media (max-width: 768px) {
@@ -224,5 +237,48 @@
   
   .projects-subtitle {
     font-size: 1rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 } 

@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/CertificationsPage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { FaExternalLinkAlt, FaCheckCircle, FaMedal, FaCertificate, FaAward } from 'react-icons/fa';
 
 function CertificationsPage({ isDarkMode, toggleTheme }) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Add initial fade-in animation
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   const certifications = [
     {
       id: 1,
@@ -90,7 +101,7 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
   return (
     <div className={`certifications-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <Navbar toggleTheme={toggleTheme} />
-      <main className="certifications-container">
+      <main className={`certifications-container ${isVisible ? 'fade-in' : ''}`}>
         <h1 className="certifications-title">My <span className="highlight">Certifications</span></h1>
         <p className="certifications-subtitle">Credentials validating my expertise in AI and machine learning</p>
         
@@ -99,8 +110,12 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
           <div className="featured-grid">
             {certifications
               .filter(cert => cert.featured)
-              .map(cert => (
-                <div key={cert.id} className="featured-card">
+              .map((cert, index) => (
+                <div 
+                  key={cert.id} 
+                  className="featured-card"
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
                   <div className="cert-icon-container">
                     <div className="cert-icon">
                       {cert.icon}
@@ -134,8 +149,12 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
             <div key={year} className="year-section">
               <h3 className="year-title">{year}</h3>
               <div className="cert-timeline">
-                {certByYear[year].map(cert => (
-                  <div key={cert.id} className="timeline-card">
+                {certByYear[year].map((cert, index) => (
+                  <div 
+                    key={cert.id} 
+                    className="timeline-card"
+                    style={{ animationDelay: `${index * 0.15}s` }}
+                  >
                     <div className="timeline-marker">
                       <FaCheckCircle />
                     </div>

@@ -64,7 +64,7 @@
   padding-top: 20px; /* Add padding to ensure spacing from the top */
   color: #ffffff;
   font-weight: bold;
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family: Arial, sans-serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
@@ -77,6 +77,7 @@
 }
 
 .project-card {
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
@@ -92,6 +93,7 @@
   position: relative; /* For absolute positioning of link */
 }
 
+
 .project-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
@@ -99,19 +101,23 @@
 }
 
 .project-card h3 {
-
+  color: #ffffff;
   margin: 15px 0;
   font-size: 1.4rem;
 }
+.light-mode .project-card h3, .light-mode .project-card p {
+  color: #000000;
+}
 
 .project-card p {
-
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   flex-grow: 1; /* Allow description to fill available space */
+
   display: -webkit-box;
   -webkit-line-clamp: 3; /* Limit to 3 lines */
   -webkit-box-orient: vertical;
+
 }
 
 .project-image {
@@ -119,13 +125,13 @@
   height: 180px; /* Fixed height for all images */
   object-fit: cover;
   border-radius: 8px;
-  margin-bottom: 0px;
+  margin-bottom: 15px;
   box-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
 }
 
 .project-link {
   position: absolute;
-  bottom: 0px;
+  bottom: 20px;
   background-color: transparent;
   border: 2px solid #ffffff;
   color: #ffffff;
@@ -181,13 +187,22 @@
   font-size: 1rem;
   border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s, color 0.3s, border-color 0.3s;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  /* Separate transitions for appearance vs. hover effects */
+  transition: 
+    opacity 0.5s ease, 
+    transform 0.5s ease,
+    background-color 0.2s ease, 
+    color 0.2s ease, 
+    border-color 0.2s ease, 
+    box-shadow 0.2s ease;
 }
 
 .hero-button::before {
@@ -226,22 +241,13 @@
   background-color: transparent;
   color: black;
 }
-
+.light-mode .project-card {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  transition: all 0.3s ease;
+}
 .light-mode .project-image {
   background-color: transparent;
-}
-.proj-desc{
-  position: relative;
-  bottom:20px;
-}
-
-.proj-title{
-  position: relative;
-  bottom:10px;
-}
-
-.light-mode .proj-title,.light-mode .proj-desc{
-  color:black;
 }
 
 
@@ -257,6 +263,7 @@
 .dark-mode .project-card {
   background: rgba(0, 0, 0, 0.7);
   color: white;
+  transition: all 0.3s ease;
 }
 .dark-mode .project-image {
   background-color: transparent;
@@ -279,8 +286,12 @@
   font-size: 1.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
-  animation: bounce 2s infinite;
   z-index: 10;
+}
+
+.scroll-down-button.animate-hero {
+  animation: bounce 2s infinite;
+  animation-delay: 1s;
 }
 
 .scroll-down-button:hover {
@@ -335,6 +346,11 @@
     flex-direction: column;
     gap: 15px;
     bottom: 150px;
+  }
+
+  .hero-buttons.animate-hero {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .hero-button {
@@ -458,4 +474,48 @@
     font-size: 0.9rem;
     padding: 10px 20px;
   }
+}
+
+/* Hero animations */
+.hero-text, .tagline, .hero-buttons, .scroll-down-button {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-text.animate-hero {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.tagline.animate-hero {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.4s;
+}
+
+.hero-buttons.animate-hero {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.6s;
+}
+
+.scroll-down-button.animate-hero {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.8s;
+}
+
+/* Button animation */
+.animate-hero .first-button {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.7s, 0.7s, 0s, 0s, 0s, 0s; /* Delay only for opacity and transform */
+}
+
+.animate-hero .second-button {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.9s, 0.9s, 0s, 0s, 0s, 0s; /* Delay only for opacity and transform */
 }

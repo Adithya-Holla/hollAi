@@ -38,18 +38,18 @@
 }
 
 .hero {
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 0; /* Remove bottom margin to eliminate gap */
+  margin-bottom: 0;
 }
 
 .projects {
-  width: 100%; /* Use full width of the container */
+  width: 100%;
   padding: 50px 0;
   display: flex;
-  justify-content: space-around; /* Distribute space evenly */
+  justify-content: space-around;
   gap: 20px;
 }
 

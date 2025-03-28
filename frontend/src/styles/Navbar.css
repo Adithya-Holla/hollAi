@@ -61,7 +61,7 @@
   width: 250px;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.85);
-  transition: right 0.4s ease;
+  transition: right 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -83,14 +83,29 @@
 .nav-links li {
   opacity: 0;
   transform: translateX(20px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   margin-bottom: 20px;
-  transition-delay: calc(0.05s * var(--item-index, 0));
+  transition-delay: calc(0.1s * var(--item-index, 0));
 }
 
 .menu-container.active .nav-links li {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* Add exit animation for nav links */
+.menu-container:not(.active) .nav-links li {
+  opacity: 0;
+  transform: translateX(20px);
+  transition-delay: calc(0.1s * (5 - var(--item-index, 0)));
+}
+
+/* Add exit animation for menu container */
+.menu-container:not(.active) {
+  right: -100%;
+  transition: right 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0.5s;
 }
 
 .nav-links li:nth-child(1) { --item-index: 1; }
@@ -109,13 +124,24 @@
   text-align: center;
 }
 
-.nav-links a:hover {
-  color: #9333ea;
+.dark-mode .nav-links a:hover {
+  color: #6529be;
   transform: translateX(5px);
 }
 
-.nav-links a.active {
+.light-mode .nav-links a:hover {
+  color: #FFC700;
+  transform: translateX(5px);
+}
+
+.dark-mode .nav-links a.active {
   color: #9333ea;
+  font-weight: bold;
+  position: relative;
+}
+
+.light-mode .nav-links a.active {
+  color: #FFC700;
   font-weight: bold;
   position: relative;
 }
@@ -129,6 +155,14 @@
   width: 20px;
   height: 2px;
   background-color: #9333ea;
+}
+
+.light-mode .nav-links a.active::after {
+  background-color: #FFC700;
+}
+
+.dark-mode .nav-links a.active::after {
+  background-color: #6529be;
 }
 
 .overlay {

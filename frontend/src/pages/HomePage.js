@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/HomePage.css';
 import Navbar from '../components/Navbar';
@@ -7,6 +7,16 @@ import { FaChevronDown } from 'react-icons/fa';
 
 function HomePage({ isDarkMode, toggleTheme }) {
   const projectsRef = useRef(null);
+  const [heroVisible, setHeroVisible] = useState(false);
+
+  useEffect(() => {
+    // Start the hero animations after a short delay when component mounts
+    const timer = setTimeout(() => {
+      setHeroVisible(true);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const scrollToProjects = () => {
     projectsRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -21,13 +31,13 @@ function HomePage({ isDarkMode, toggleTheme }) {
             <source src="https://cdn.pixabay.com/video/2024/03/29/206132.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <h1 className="hero-text">Explore<br /><span className="highlight">hollAi</span></h1>
-          <p className="tagline">Where hardwork meets intelligence</p>
-          <div className="hero-buttons">
-            <Link to="/projects" className="hero-button">My Projects</Link>
-            <Link to="/contact" className="hero-button">Contact Me</Link>
+          <h1 className={`hero-text ${heroVisible ? 'animate-hero' : ''}`}>Explore<br /><span className="highlight">hollAi</span></h1>
+          <p className={`tagline ${heroVisible ? 'animate-hero' : ''}`}>Where hardwork meets intelligence</p>
+          <div className={`hero-buttons ${heroVisible ? 'animate-hero' : ''}`}>
+            <Link to="/projects" className="hero-button first-button">My Projects</Link>
+            <Link to="/contact" className="hero-button second-button">Contact Me</Link>
           </div>
-          <button className="scroll-down-button" onClick={scrollToProjects}>
+          <button className={`scroll-down-button ${heroVisible ? 'animate-hero' : ''}`} onClick={scrollToProjects}>
             <FaChevronDown />
           </button>
         </section>
@@ -36,20 +46,20 @@ function HomePage({ isDarkMode, toggleTheme }) {
           <div className="projects">
             <div className="project-card">
               <img src="/images/braintumor.png" alt="Project 1" className="project-image" />
-              <h3 className="proj-title">TumorDetect</h3>
-              <p className='proj-desc'>Detecting and classifying brain tumor using Ai</p>
+              <h3>TumorDetect</h3>
+              <p>Detecting and classifying brain tumors from MRI scans with high accuracy.</p>
               <a href="https://cruxtumor.netlify.app" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
             <div className="project-card">
-              <img src="/images/braintumor.png" alt="Project 2" className="project-image" />
-              <h3 className='proj-title'>Project 2</h3>
-              <p className='proj-desc'>Description of project 2.</p>
+              <img src="/images/project2.jpg" alt="Project 2" className="project-image" />
+              <h3>Project 2</h3>
+              <p>Description of project 2.</p>
               <a href="https://project2.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
             <div className="project-card">
-              <img src="/images/braintumor.png" alt="Project 3" className="project-image" />
-              <h3 className='proj-title'>Project 3</h3>
-              <p className='proj-desc'>Description of project 3.</p>
+              <img src="/images/project3.jpg" alt="Project 3" className="project-image" />
+              <h3>Project 3</h3>
+              <p>Description of project 3.</p>
               <a href="https://project3.com" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
             </div>
           </div>
