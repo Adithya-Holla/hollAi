@@ -294,11 +294,25 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   z-index: 10;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
 }
 
 .scroll-down-button:hover {
   background: rgba(255, 255, 255, 0.4);
   transform: translateX(-50%) scale(1.1);
+  animation: none;
 }
 
 .light-mode .scroll-down-button {
@@ -313,18 +327,6 @@
 .dark-mode .scroll-down-button {
   color: #6529be;
   border-color: #6529be;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  40% {
-    transform: translateX(-50%) translateY(-10px);
-  }
-  60% {
-    transform: translateX(-50%) translateY(-5px);
-  }
 }
 
 @keyframes fadeInUp {

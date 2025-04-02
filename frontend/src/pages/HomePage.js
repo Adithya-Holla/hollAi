@@ -19,12 +19,34 @@ function HomePage({ isDarkMode, toggleTheme }) {
   }, []);
 
   const scrollToProjects = () => {
-    projectsRef.current.scrollIntoView({ behavior: 'smooth' });
+    const startPosition = window.pageYOffset;
+    const targetPosition = projectsRef.current.offsetTop;
+    const distance = targetPosition - startPosition;
+    const duration = 1000; // 1 second duration
+    let start = null;
+
+    const animation = (currentTime) => {
+      if (start === null) start = currentTime;
+      const timeElapsed = currentTime - start;
+      const progress = Math.min(timeElapsed / duration, 1);
+      
+      // Using cubic-bezier easing function for smooth acceleration and deceleration
+      const ease = t => t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1;
+      const easedProgress = ease(progress);
+      
+      window.scrollTo(0, startPosition + (distance * easedProgress));
+      
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      }
+    };
+
+    requestAnimationFrame(animation);
   };
 
   return (
     <div className={`home-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} />
+      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
       <main>
         <section className="hero">
           <video className="hero-video" autoPlay loop muted>
@@ -61,4 +83,4 @@ function HomePage({ isDarkMode, toggleTheme }) {
   );
 }
 
-export default HomePage; 
+export default HomePage;

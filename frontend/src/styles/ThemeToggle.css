@@ -17,22 +17,22 @@
     box-shadow: 0 0 0 0 rgba(255, 199, 0, 0.7);
   }
   70% {
-    box-shadow: 0 0 0 10px rgba(255, 199, 0, 0);
+    box-shadow: 0 0 0 15px rgba(255, 199, 0, 0);
   }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 199, 0, 0);
   }
 }
 
-@keyframes pulsePurple {
+@keyframes float {
   0% {
-    box-shadow: 0 0 0 0 rgba(101, 41, 190, 0.7);
+    transform: translateY(0px);
   }
-  70% {
-    box-shadow: 0 0 0 10px rgba(101, 41, 190, 0);
+  50% {
+    transform: translateY(-5px);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(101, 41, 190, 0);
+    transform: translateY(0px);
   }
 }
 
@@ -40,12 +40,12 @@
   background-color: rgba(0, 0, 0, 0.3);
   color: #FFC700;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  width: 40px;
-  height: 40px;
-  font-size: 1.3rem;
-  border-radius: 4px;
+  width: 45px;
+  height: 45px;
+  font-size: 1.5rem;
+  border-radius: 50%; /* Make it circular */
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
+  transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
@@ -53,42 +53,29 @@
   padding: 0;
   position: relative;
   overflow: hidden;
+  animation: float 3s ease-in-out infinite;
 }
 
 .theme-toggle:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) translateY(-5px);
   background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .theme-toggle:active {
-  animation: rotate 0.5s ease-in-out;
+  animation: rotate 0.5s ease-in-out, pulse 0.5s ease-in-out;
 }
 
-.theme-toggle.light:active {
-  animation: pulse 0.5s;
-}
-
-.theme-toggle.dark:active {
-  animation: pulsePurple 0.5s;
-}
-
-/* Animation class that can be added programmatically */
 .theme-toggle.animate {
-  animation: rotate 0.5s ease-in-out;
+  animation: rotate 0.5s ease-in-out, pulse 0.5s ease-in-out;
 }
 
-.theme-toggle.light.animate {
-  animation: pulse 0.5s, rotate 0.5s ease-in-out;
-}
-
-.theme-toggle.dark.animate {
-  animation: pulsePurple 0.5s, rotate 0.5s ease-in-out;
-}
-
+/* Make the button look the same in both modes */
 .theme-toggle.dark {
   color: #6529be;
 }
 
+/* Remove the dark mode specific styles */
 body.dark-mode {
   background-color: #121212;
   color: #f0f0f0;
@@ -102,6 +89,9 @@ body.light-mode {
 /* Mobile adjustments */
 @media screen and (max-width: 768px) {
   .theme-toggle {
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   }
 } 

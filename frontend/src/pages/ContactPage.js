@@ -20,7 +20,7 @@ function ContactPage({ isDarkMode, toggleTheme }) {
 
   return (
     <div className={`contact-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} />
+      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
       <main className="contact-container">
         <h1 className="contact-title">Get in <span className="highlight">Touch</span></h1>
         <p className="contact-subtitle">Have a question or want to work together? Let's connect!</p>

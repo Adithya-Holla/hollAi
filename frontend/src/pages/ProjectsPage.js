@@ -30,7 +30,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
 
   return (
     <div className={`projects-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} />
+      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
       <main className={`projects-container ${isVisible ? 'fade-in' : ''}`}>
       <h1 className="certifications-title">My <span className="highlight">Projects</span></h1>
       <p className="certifications-subtitle">Discove my cool projects</p>

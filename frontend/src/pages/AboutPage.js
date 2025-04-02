@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/AboutPage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -31,7 +31,7 @@ function AboutPage({ isDarkMode, toggleTheme }) {
   };
 
   // Handle scroll to check which elements are visible
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (titleRef.current && !visibleElements.title && isInViewport(titleRef.current)) {
       setVisibleElements(prev => ({ ...prev, title: true }));
     }
@@ -43,7 +43,7 @@ function AboutPage({ isDarkMode, toggleTheme }) {
     if (accordionRef.current && !visibleElements.accordion && isInViewport(accordionRef.current)) {
       setVisibleElements(prev => ({ ...prev, accordion: true }));
     }
-  };
+  }, [visibleElements]);
 
   useEffect(() => {
     // Add initial fade-in animation
@@ -80,7 +80,7 @@ function AboutPage({ isDarkMode, toggleTheme }) {
 
   return (
     <div className={`about-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} />
+      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
       <main className={`about-container ${isVisible ? 'fade-in' : ''}`}>
         <section className="about-section">
           <h1 

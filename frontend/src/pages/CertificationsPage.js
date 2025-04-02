@@ -18,7 +18,7 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
 
   return (
     <div className={`certifications-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} />
+      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
       <main className={`certifications-container ${isVisible ? 'fade-in' : ''}`}>
         <h1 className="certifications-title">My <span className="highlight">Certifications</span></h1>
         <p className="certifications-subtitle">Credentials validating my expertise in AI and machine learning</p>

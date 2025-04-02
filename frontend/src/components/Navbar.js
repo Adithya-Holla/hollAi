@@ -4,7 +4,7 @@ import '../styles/Navbar.css';
 import ThemeToggle from './ThemeToggle';
 import { FaBars, FaTimes } from 'react-icons/fa';
 
-function Navbar({ toggleTheme }) {
+function Navbar({ toggleTheme, isDarkMode }) {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -35,7 +35,7 @@ function Navbar({ toggleTheme }) {
         
         <div className="controls">
           <div className="theme-toggle-container">
-            <ThemeToggle toggleTheme={toggleTheme} />
+            <ThemeToggle toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
           </div>
           
           <button className="burger-menu" onClick={toggleMenu} aria-label="Toggle menu">
