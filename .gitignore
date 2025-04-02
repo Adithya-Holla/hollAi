@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+
+# Debug logs
+logs/
+*.log
+
+# Misc
+.DS_Store
+.cache/
+coverage/
+
+# Strange files created accidentally
+"h origin master:main"
+"h origin main"
+"h origin main * Write-Output*"
+"hell -File git-push.ps1"
+"frontend/h origin master:main"
+ersHOLLADocumentshollai 
