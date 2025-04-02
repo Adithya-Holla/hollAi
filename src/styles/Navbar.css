@@ -1,0 +1,259 @@
+/* Navbar Styles */
+.navbar-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+  width: 100%;
+  background-color: transparent; /* Make it fully transparent */
+}
+
+.logo {
+  z-index: 1001;
+}
+
+.logo a {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  z-index: 1001;
+}
+
+.theme-toggle-container {
+  margin-right: 15px;
+}
+
+.burger-menu {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  padding: 0;
+  color: white;
+}
+
+.burger-menu:hover {
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.menu-container {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 250px;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  transition: right 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.menu-container.active {
+  right: 0;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.nav-links li {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 20px;
+  transition-delay: calc(0.1s * var(--item-index, 0));
+}
+
+.menu-container.active .nav-links li {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Add exit animation for nav links */
+.menu-container:not(.active) .nav-links li {
+  opacity: 0;
+  transform: translateX(20px);
+  transition-delay: calc(0.1s * (5 - var(--item-index, 0)));
+}
+
+/* Add exit animation for menu container */
+.menu-container:not(.active) {
+  right: -100%;
+  transition: right 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0.5s;
+}
+
+.nav-links li:nth-child(1) { --item-index: 1; }
+.nav-links li:nth-child(2) { --item-index: 2; }
+.nav-links li:nth-child(3) { --item-index: 3; }
+.nav-links li:nth-child(4) { --item-index: 4; }
+.nav-links li:nth-child(5) { --item-index: 5; }
+
+.nav-links a {
+  font-size: 1.2rem;
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.dark-mode .nav-links a:hover {
+  color: #6529be;
+  transform: translateX(5px);
+}
+
+.light-mode .nav-links a:hover {
+  color: #FFC700;
+  transform: translateX(5px);
+}
+
+.dark-mode .nav-links a.active {
+  color: #9333ea;
+  font-weight: bold;
+  position: relative;
+}
+
+.light-mode .nav-links a.active {
+  color: #FFC700;
+  font-weight: bold;
+  position: relative;
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background-color: #9333ea;
+}
+
+.light-mode .nav-links a.active::after {
+  background-color: #FFC700;
+}
+
+.dark-mode .nav-links a.active::after {
+  background-color: #6529be;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  transition: opacity 0.3s ease;
+}
+
+/* Light and Dark Mode Styles */
+.light-mode .menu-container {
+  background-color: rgba(72, 166, 167, 0.85);
+  backdrop-filter: blur(10px);
+}
+
+.dark-mode .menu-container {
+  background-color: rgba(19, 93, 102, 0.85);
+  backdrop-filter: blur(10px);
+}
+
+.light-mode .logo a {
+  color: #FFC700;
+}
+
+.dark-mode .logo a {
+  color: #6529be;
+}
+
+.light-mode .burger-menu,
+.dark-mode .burger-menu {
+  color: white;
+}
+
+/* For small screens, adjust the menu width */
+@media screen and (max-width: 480px) {
+  .navbar-container {
+    padding: 10px 15px;
+  }
+  
+  .logo a {
+    font-size: 1.3rem;
+  }
+  
+  .burger-menu,
+  .theme-toggle {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
+  }
+  
+  .menu-container {
+    width: 100%;
+    padding-top: 20px;
+  }
+  
+  .nav-links li {
+    margin-bottom: 15px;
+  }
+  
+  .nav-links a {
+    padding: 12px 20px;
+  }
+}
+
+/* Specific mobile adjustments */
+@media screen and (max-width: 768px) {
+  .navbar-container {
+    padding: 15px;
+  }
+  
+  .logo a {
+    font-size: 1.4rem;
+  }
+  
+  .burger-menu,
+  .theme-toggle {
+    width: 38px;
+    height: 38px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  }
+  
+  .theme-toggle-container {
+    margin-right: 10px;
+  }
+  
+  .nav-links a {
+    font-size: 1.3rem;
+    padding: 15px 20px;
+  }
+}
