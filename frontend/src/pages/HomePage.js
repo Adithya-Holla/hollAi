@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import '../styles/HomePage.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaChevronDown } from 'react-icons/fa';
+import { FaChevronDown, FaGithub, FaExternalLinkAlt, FaCode, FaFolder } from 'react-icons/fa';
 
 function HomePage({ isDarkMode, toggleTheme }) {
   const projectsRef = useRef(null);
   const [heroVisible, setHeroVisible] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // Start the hero animations after a short delay when component mounts
@@ -16,6 +19,31 @@ function HomePage({ isDarkMode, toggleTheme }) {
     }, 300);
     
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Fetch the first 3 projects from MongoDB
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/projects');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch projects');
+        }
+        
+        const data = await response.json();
+        // Get only the first 3 projects
+        setProjects(data.slice(0, 3));
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching projects:', err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
   }, []);
 
   const scrollToProjects = () => {
@@ -66,12 +94,62 @@ function HomePage({ isDarkMode, toggleTheme }) {
         <section className="projects-section" ref={projectsRef}>
           <h2 className="projects-title">My Recent Projects</h2>
           <div className="projects">
-            <div className="project-card">
-              <img src="/images/braintumor.png" alt="Brain Tumor Detection" className="project-image" />
-              <h3>Brain Tumor Detection</h3>
-              <p>An AI-powered system that can detect and classify brain tumors from MRI scans with high accuracy.</p>
-              <a href="https://cruxtumor.netlify.app" target="_blank" rel="noopener noreferrer" className="project-link">Visit Project</a>
-            </div>
+            {loading ? (
+              <div className="loading-container">
+                <div className="loading-spinner"></div>
+                <p>Loading projects...</p>
+              </div>
+            ) : error ? (
+              <div className="error-container">
+                <p>Error loading projects: {error}</p>
+              </div>
+            ) : projects.length === 0 ? (
+              <div className="no-projects">
+                <FaFolder className="no-projects-icon" />
+                <p>No projects available at the moment.</p>
+              </div>
+            ) : (
+              <>
+                {projects.map((project, index) => (
+                  <div 
+                    key={project._id} 
+                    className="project-card"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="project-image-container">
+                      {project.imageUrl ? (
+                        <img src={project.imageUrl} alt={project.title} className="project-image" />
+                      ) : (
+                        <div className="project-placeholder">
+                          <FaCode className="project-placeholder-icon" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="project-content">
+                      <h3 className="project-title">{project.title}</h3>
+                      <p className="project-description">{project.description}</p>
+                      <div className="project-technologies">
+                        {project.technologies && project.technologies.map((tech, idx) => (
+                          <span key={idx} className="technology-tag">{tech}</span>
+                        ))}
+                      </div>
+                      <div className="project-links">
+                        {project.githubUrl && (
+                          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                            <FaGithub /> Code
+                          </a>
+                        )}
+                        {project.liveUrl && (
+                          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                            <FaExternalLinkAlt /> Demo
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
           <div className="view-all-projects">
             <Link to="/projects" className="view-all-button">View All Projects</Link>
