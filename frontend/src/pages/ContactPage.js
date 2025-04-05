@@ -44,7 +44,7 @@ function ContactPage({ isDarkMode, toggleTheme }) {
     setFormStatus({ submitted: true, error: false, message: 'Sending message...' });
     
     try {
-      const response = await fetch('http://localhost:5000/api/emails/contact', {
+      const response = await fetch('https://hollai-backend-b31l.onrender.com/api/emails/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
