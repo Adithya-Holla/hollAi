@@ -34,7 +34,7 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
     const fetchCertifications = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/certifications');
+        const response = await fetch('https://hollai-backend-b31l.onrender.com/api/certifications');
         
         if (!response.ok) {
           throw new Error('Failed to fetch certifications');
