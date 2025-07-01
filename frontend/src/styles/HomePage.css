@@ -1,5 +1,251 @@
 /* Basic styles for the HomePage component */
 
+.theme-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  pointer-events: none;
+  transition: background-color 0.5s ease;
+  overflow: hidden;
+}
+
+
+.cs-background-animation {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+  transition: background-color 0.6s ease-in-out;
+}
+
+/* Sun (light mode) */
+.cs-background-animation.light-mode::before {
+  content: '';
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #FFD700 0%, #FFA500 70%, transparent 100%);
+  border-radius: 50%;
+  animation: sunPulse 5s ease-in-out infinite;
+}
+
+@keyframes sunPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.9; }
+}
+
+.theme-background.dark-mode {
+  background-color: #0d001a;
+}
+
+.cs-background-animation.dark-mode::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 0;
+  animation: lightningFlash 4s infinite ease-in-out;
+  pointer-events: none;
+}
+
+
+@keyframes lightningFlash {
+  0%, 89%, 100% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  91% {
+    opacity: 0.7;
+  }
+  92%, 95% {
+    opacity: 0.6;
+  }
+  96% {
+    opacity: 0.5;
+  }
+  97% {
+    opacity: 0.9;
+  }
+  98% {
+    opacity: 0.1;
+  }
+  99% {
+    opacity: 0;
+  }
+}
+
+.rain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.drop {
+  position: absolute;
+  bottom:100%;
+  width: 1px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.3);
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+
+.thunderbolt {
+  position: absolute;
+  width: 4px;
+  height: 100%;
+  left: 60%;
+  background: linear-gradient(to bottom, white, transparent);
+  opacity: 0;
+  animation: thunderBoltAnim 4s infinite;
+}
+
+@keyframes thunderBoltAnim {
+  0%, 89%, 100% { opacity: 0; }
+  93% { opacity: 0.7; transform: scaleY(1.2); }
+  96% { opacity: 0.6; }
+  98% { opacity: 0; }
+}
+
+
+.cloud {
+  position: absolute;
+  width: 200px;
+  height: 80px;
+  border-radius: 100px;
+  background: #ccc;
+  animation: moveClouds 60s linear infinite;
+  top: 10%;
+  z-index: 1; /* Default to front */
+}
+
+.cloud2 {
+  z-index: 0; /* Behind */
+  animation-delay: 3s;
+}
+
+
+.cloud-dark {
+  background: #333;
+  opacity: 0.4;
+}
+
+.cloud-light {
+  background: #eee;
+  opacity: 0.5;
+}
+
+@keyframes moveClouds {
+  0% { left: -300px; }
+  100% { left: 100vw; }
+}
+
+
+
+
+
+.butterfly {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url('/public/butterflies.png') no-repeat center;
+  background-size: contain;
+  animation: flyButterfly 20s linear infinite;
+}
+
+.bats {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url('/public/bats.png') no-repeat center;
+  background-size: contain;
+  animation: flyButterfly 20s linear infinite;
+}
+
+@keyframes flyButterfly {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(100px, -50px) rotate(10deg); }
+  50%  { transform: translate(200px, 0px) rotate(-10deg); }
+  75%  { transform: translate(300px, -30px) rotate(5deg); }
+  100% { transform: translate(400px, 0) rotate(0deg); }
+}
+
+
+.cs-background-animation.light-mode {
+  background: linear-gradient(to top, #3090b1, #b8b997);
+}
+
+.cs-background-animation.dark-mode {
+  background-color: #0d001a;
+}
+
+
+
+/* Birds */
+.bird {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: black;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: birdFly 20s linear infinite;
+}
+
+.bird::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: -4px;
+  width: 12px;
+  height: 12px;
+  background: black;
+  border-radius: 50%;
+}
+
+/* Flying path */
+@keyframes birdFly {
+  0% {
+    transform: translateX(0vw) translateY(0vh) scale(1);
+  }
+  50% {
+    transform: translateX(50vw) translateY(-10vh) scale(1.1);
+  }
+  100% {
+    transform: translateX(100vw) translateY(0vh) scale(1);
+  }
+}
+
+
+
+
 .home-page {
   font-family: Arial, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -23,6 +269,7 @@
   overflow: hidden;
   margin-top: 0;
   padding-top: 0;
+  z-index: 1;
 }
 
 .hero-video {

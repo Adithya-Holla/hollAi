@@ -104,7 +104,7 @@ function AboutPage({ isDarkMode, toggleTheme }) {
               >
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
-                    <img src="/images/profile-image.png" alt="Profile" className="about-image" loading="lazy"/>
+                    <img src="/profile-imag.jpeg" alt="Profile" className="about-image" loading="lazy"/>
                   </div>
                   <div className="flip-card-back">
                     <h3>Adithya V Holla</h3>
