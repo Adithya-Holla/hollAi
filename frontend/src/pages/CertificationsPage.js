@@ -95,7 +95,7 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
                     >
                       {cert.imageUrl ? (
                         <div className="cert-image-container">
-                          <img src={cert.imageUrl} alt={cert.title} className="cert-image" />
+                          <img src={cert.imageUrl} alt={cert.title} className="cert-image"  loading="lazy"/>
                         </div>
                       ) : (
                         <div className="cert-icon-container">
