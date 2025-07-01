@@ -77,7 +77,7 @@ function HomePage({ isDarkMode, toggleTheme }) {
       <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
       <main>
         <section className="hero">
-          <video className="hero-video" autoPlay loop muted>
+          <video className="hero-video" autoPlay loop muted playsInline preload="auto">
             <source src="/hero-background.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
