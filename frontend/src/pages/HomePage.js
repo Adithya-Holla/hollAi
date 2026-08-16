@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/HomePage.css';
 import { buildApiUrl } from '../config/api';
+import RevealText from '../components/RevealText';
 import { FaChevronDown, FaGithub, FaExternalLinkAlt, FaCode, FaFolder } from 'react-icons/fa';
 
 function HomePage() {
@@ -63,83 +64,108 @@ function HomePage() {
 
   return (
     <div className="home-page">
-      <>
-        <section className="hero">
-          <h1 className="hero-text">Welcome To<br /><span className="highlight">hollAi</span></h1>
-          <p className="tagline">Lets Explore My Workspace</p>
-          <div className="hero-buttons">
-            <Link to="/projects" className="hero-button first-button">My Projects</Link>
-            <Link to="/contact" className="hero-button second-button">Contact Me</Link>
+      <section className="hero">
+        <span className="t-mono hero-eyebrow">Welcome to</span>
+        <h1 className="hero-text">
+          <span className="hero-solid">
+            <RevealText text="HOLL" delay={320} />
+          </span>
+          <span className="hero-ai">
+            <RevealText text="AI" delay={408} />
+          </span>
+        </h1>
+        <p className="t-body tagline">Lets Explore My Workspace</p>
+        <div className="hero-buttons">
+          <Link to="/projects" className="hero-button">My Projects</Link>
+          <Link to="/contact" className="hero-button">Contact Me</Link>
+        </div>
+        <button
+          className="scroll-down-button"
+          onClick={scrollToProjects}
+          aria-label="Scroll to recent projects"
+        >
+          <FaChevronDown aria-hidden="true" />
+        </button>
+      </section>
+
+      <section className="projects-section" ref={projectsRef}>
+        <div className="section-head">
+          <span className="t-mono">Selected work</span>
+          <h2 className="section-title">Recent Projects</h2>
+        </div>
+
+        {loading ? (
+          <div className="state-block t-mono">Loading projects…</div>
+        ) : error ? (
+          <div className="state-block state-block--error t-mono">
+            Error loading projects: {error}
           </div>
-          <button className="scroll-down-button" onClick={scrollToProjects} aria-label="Scroll to projects">
-            <FaChevronDown />
-          </button>
-        </section>
-        <section className="projects-section" ref={projectsRef}>
-          <h2 className="projects-title">My Recent Projects</h2>
-          <div className="projects">
-            {loading ? (
-              <div className="loading-container">
-                <div className="loading-spinner"></div>
-                <p>Loading projects...</p>
-              </div>
-            ) : error ? (
-              <div className="error-container">
-                <p>Error loading projects: {error}</p>
-              </div>
-            ) : projects.length === 0 ? (
-              <div className="no-projects">
-                <FaFolder className="no-projects-icon" />
-                <p>No projects available at the moment.</p>
-              </div>
-            ) : (
-              <>
-                {projects.map((project, index) => (
-                  <div 
-                    key={project._id} 
-                    className="project-card"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    <div className="project-image-container">
-                      {project.imageUrl ? (
-                        <img src={project.imageUrl} alt={project.title} className="project-image" />
-                      ) : (
-                        <div className="project-placeholder">
-                          <FaCode className="project-placeholder-icon" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="project-content">
-                      <h3 className="project-title">{project.title}</h3>
-                      <p className="project-description">{project.description}</p>
-                      <div className="project-technologies">
-                        {project.technologies && project.technologies.map((tech, idx) => (
-                          <span key={idx} className="technology-tag">{tech}</span>
-                        ))}
-                      </div>
-                      <div className="project-links">
-                        {project.githubUrl && (
-                          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-link">
-                            <FaGithub /> Code
-                          </a>
-                        )}
-                        {project.liveUrl && (
-                          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="project-link">
-                            <FaExternalLinkAlt /> Demo
-                          </a>
-                        )}
-                      </div>
-                    </div>
+        ) : projects.length === 0 ? (
+          <div className="state-block t-mono">
+            <FaFolder aria-hidden="true" /> No projects available at the moment.
+          </div>
+        ) : (
+          <ol className="preview-list">
+            {projects.map((project, index) => (
+              <li key={project._id} className="preview-item">
+                <span className="preview-index t-mono">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+
+                <div className="preview-body">
+                  <h3 className="preview-title">{project.title}</h3>
+                  <p className="t-body preview-description">{project.description}</p>
+                  {project.technologies && project.technologies.length > 0 && (
+                    <ul className="preview-tech">
+                      {project.technologies.map((tech) => (
+                        <li key={tech} className="t-mono">{tech}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <div className="preview-links">
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="t-mono inline-link"
+                      >
+                        <FaGithub aria-hidden="true" /> Code
+                      </a>
+                    )}
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="t-mono inline-link"
+                      >
+                        <FaExternalLinkAlt aria-hidden="true" /> Demo
+                      </a>
+                    )}
                   </div>
-                ))}
-              </>
-            )}
-          </div>
-          <div className="view-all-projects">
-            <Link to="/projects" className="view-all-button">View All Projects</Link>
-          </div>
-        </section>
-      </>
+                </div>
+
+                <div className="preview-visual">
+                  {project.imageUrl ? (
+                    <img src={project.imageUrl} alt={project.title} loading="lazy" />
+                  ) : (
+                    <div className="preview-plate t-mono" aria-hidden="true">
+                      <FaCode />
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
+
+        <div className="view-all-projects">
+          <Link to="/projects" className="t-mono inline-link inline-link--lg">
+            View All Projects
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
