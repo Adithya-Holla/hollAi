@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/ProjectsPage.css';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { buildApiUrl } from '../config/api';
 import { FaGithub, FaExternalLinkAlt, FaCode, FaFolder } from 'react-icons/fa';
 
-function ProjectsPage({ isDarkMode, toggleTheme }) {
+function ProjectsPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +23,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
     const fetchProjects = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://hollai-backend-b31l.onrender.com/api/projects');
+        const response = await fetch(buildApiUrl('/projects'));
         
         if (!response.ok) {
           throw new Error('Failed to fetch projects');
@@ -50,9 +49,8 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
   const otherProjects = projects.filter(project => !project.featured);
 
   return (
-    <div className={`projects-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
-      <main className={`projects-container ${isVisible ? 'fade-in' : ''}`}>
+    <div className="projects-page">
+      <div className={`projects-container ${isVisible ? 'fade-in' : ''}`}>
         {/* Title and subtitle section with enhanced styling */}
         <div className="title-section">
           <h1 className="projects-title">My <span className="highlight">Projects</span></h1>
@@ -170,8 +168,7 @@ function ProjectsPage({ isDarkMode, toggleTheme }) {
             )}
           </>
         )}
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }

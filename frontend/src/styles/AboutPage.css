@@ -5,14 +5,9 @@
   transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.about-page.dark-mode {
+.about-page {
   background-color: #121212;
   color: #f5f5f5;
-}
-
-.about-page.light-mode {
-  background-color: #f5f5f5;
-  color: #333;
 }
 
 .about-container {
@@ -100,16 +95,16 @@
 }
 
 @media (min-width: 768px) {
-  .about-content {
+.about-content {
     flex-direction: row;
     align-items: flex-start;
   }
-  
-  .about-image-container {
+
+.about-image-container {
     flex: 1;
   }
-  
-  .about-text {
+
+.about-text {
     flex: 2;
   }
 }
@@ -152,7 +147,8 @@
   transform: rotateY(180deg);
 }
 
-.flip-card-front, .flip-card-back {
+.flip-card-front,
+.flip-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -250,7 +246,7 @@
   transition: background-color 0.4s ease;
 }
 
-.dark-mode .accordion-header {
+.accordion-header {
   background-color: rgba(138, 43, 226, 0.2);
 }
 
@@ -258,7 +254,7 @@
   background-color: rgba(138, 43, 226, 0.2);
 }
 
-.dark-mode .accordion-header:hover {
+.accordion-header:hover {
   background-color: rgba(138, 43, 226, 0.3);
 }
 
@@ -266,7 +262,7 @@
   background-color: rgba(138, 43, 226, 0.3);
 }
 
-.dark-mode .accordion-header.active {
+.accordion-header.active {
   background-color: rgba(138, 43, 226, 0.4);
 }
 
@@ -284,7 +280,7 @@
   padding: 0 1rem;
 }
 
-.dark-mode .accordion-content {
+.accordion-content {
   background-color: rgba(30, 30, 30, 0.7);
 }
 
@@ -312,7 +308,7 @@
 }
 
 @keyframes slideInSkill {
-  to {
+to {
     opacity: 1;
     transform: translateX(0);
   }
@@ -341,7 +337,7 @@
   overflow: hidden;
 }
 
-.dark-mode .skill-bar {
+.skill-bar {
   background-color: #444;
 }
 
@@ -358,8 +354,9 @@
 }
 
 @keyframes fillBar {
-  0% { width: 0; }
-  100% { width: var(--fill-level); }
+0% { width: 0; }
+
+100% { width: var(--fill-level); }
 }
 
 /* Responsive */
@@ -371,4 +368,4 @@
   .flip-card {
     margin-bottom: 2rem;
   }
-} 
+}

@@ -1,33 +1,22 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/HomePage.css';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { buildApiUrl } from '../config/api';
 import { FaChevronDown, FaGithub, FaExternalLinkAlt, FaCode, FaFolder } from 'react-icons/fa';
 
-function HomePage({ isDarkMode, toggleTheme }) {
+function HomePage() {
   const projectsRef = useRef(null);
-  const [heroVisible, setHeroVisible] = useState(false);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    // Start the hero animations after a short delay when component mounts
-    const timer = setTimeout(() => {
-      setHeroVisible(true);
-    }, 300);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     // Fetch the first 3 projects from MongoDB
     const fetchProjects = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://hollai-backend-b31l.onrender.com/api/projects');
-        
+        const response = await fetch(buildApiUrl('/projects'));
+
         if (!response.ok) {
           throw new Error('Failed to fetch projects');
         }
@@ -73,71 +62,16 @@ function HomePage({ isDarkMode, toggleTheme }) {
   };
 
   return (
-    <div className={`home-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
-      <main>
+    <div className="home-page">
+      <>
         <section className="hero">
-          <div className={`cs-background-animation ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-          {isDarkMode ? (
-            <>
-              <div className="rain">
-              {Array.from({ length: 100 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="drop"
-                  style={{
-                    left: `${Math.random() * 100}vw`,
-                    animationDuration: `${0.5 + Math.random()}s`,
-                    animationDelay: `${Math.random() * 2}s`,
-                  }}
-                />
-              ))}
-            </div>
-
-              <div className="cloud cloud-light" style={{ top: '10%', left: '10%', zIndex: 1 }}></div>
-            <div className="cloud cloud-light cloud2" style={{ top: '25%', left: '100%', zIndex: 0 }}></div>
-              <div className="bats" style={{ top: '30%', left: '10%' }}></div>
-              <div className="bats" style={{ top: '40%', left: '60%' }}></div>
-              <div className="bats" style={{ top: '60%', left: '40%' }}></div>
-              <div className="bats" style={{ top: '20%', left: '50%' }}></div>
-              <div className="bats" style={{ top: '10%', left: '80%' }}></div>
-              <div className="bats" style={{ top: '60%', left: '10%' }}></div>
-              <div className="bats" style={{ top: '30%', left: '40%' }}></div>
-              <div className="bats" style={{ top: '20%', left: '20%' }}></div>
-              <div className="bats" style={{ top: '30%', right: '30%' }}></div>
-              <div className="bats" style={{ top: '70%', right: '20%' }}></div>
-              <div className="thunderbolt" style={{left: '80%' }}></div>
-              <div className="thunderbolt" style={{left: '30%' }}></div>
-            </>
-          ) : (
-            <>
-              <div className="sun-rays"></div>
-              <div className="cloud cloud-light" style={{ top: '10%', left: '10%', zIndex: 1 }}></div>
-            <div className="cloud cloud-light cloud2" style={{ top: '25%', left: '100%', zIndex: 0 }}></div>
-
-              <div className="butterfly" style={{ top: '30%', left: '10%' }}></div>
-              <div className="butterfly" style={{ top: '40%', left: '60%' }}></div>
-              <div className="butterfly" style={{ top: '60%', left: '40%' }}></div>
-              <div className="butterfly" style={{ top: '20%', left: '50%' }}></div>
-              <div className="butterfly" style={{ top: '10%', left: '80%' }}></div>
-              <div className="butterfly" style={{ top: '60%', left: '10%' }}></div>
-              <div className="butterfly" style={{ top: '30%', left: '40%' }}></div>
-              <div className="butterfly" style={{ top: '20%', left: '20%' }}></div>
-              <div className="butterfly" style={{ top: '30%', right: '30%' }}></div>
-              <div className="butterfly" style={{ top: '70%', right: '20%' }}></div>
-              
-            </>
-          )}
-</div>
-
-
-          <h1 className={`hero-text ${heroVisible ? 'animate-hero' : ''}`}>Welcome To<br /><span className="highlight">hollAi</span></h1>
-          <p className={`tagline ${heroVisible ? 'animate-hero' : ''}`}>Lets Explore My Workspace</p>
-          <div className={`hero-buttons ${heroVisible ? 'animate-hero' : ''}`}>
+          <h1 className="hero-text">Welcome To<br /><span className="highlight">hollAi</span></h1>
+          <p className="tagline">Lets Explore My Workspace</p>
+          <div className="hero-buttons">
             <Link to="/projects" className="hero-button first-button">My Projects</Link>
             <Link to="/contact" className="hero-button second-button">Contact Me</Link>
           </div>
-          <button className={`scroll-down-button ${heroVisible ? 'animate-hero' : ''}`} onClick={scrollToProjects}>
+          <button className="scroll-down-button" onClick={scrollToProjects} aria-label="Scroll to projects">
             <FaChevronDown />
           </button>
         </section>
@@ -205,8 +139,7 @@ function HomePage({ isDarkMode, toggleTheme }) {
             <Link to="/projects" className="view-all-button">View All Projects</Link>
           </div>
         </section>
-      </main>
-      <Footer />
+      </>
     </div>
   );
 }

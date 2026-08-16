@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import '../styles/ContactPage.css';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { buildApiUrl } from '../config/api';
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaGithub, FaLinkedin, FaCopy, FaCheck, FaPaperPlane } from 'react-icons/fa';
 
-function ContactPage({ isDarkMode, toggleTheme }) {
+function ContactPage() {
   const [copiedStates, setCopiedStates] = useState({
     email: false,
     phone: false
@@ -44,7 +43,7 @@ function ContactPage({ isDarkMode, toggleTheme }) {
     setFormStatus({ submitted: true, error: false, message: 'Sending message...' });
     
     try {
-      const response = await fetch('https://hollai-backend-b31l.onrender.com/api/emails/contact', {
+      const response = await fetch(buildApiUrl('/emails/contact'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,9 +89,8 @@ function ContactPage({ isDarkMode, toggleTheme }) {
   };
 
   return (
-    <div className={`contact-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
-      <main className="contact-container">
+    <div className="contact-page">
+      <div className="contact-container">
         <h1 className="contact-title">Get in <span className="highlight">Touch</span></h1>
         <p className="contact-subtitle">Have a question or want to work together? Let's connect!</p>
         
@@ -208,8 +206,7 @@ function ContactPage({ isDarkMode, toggleTheme }) {
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }

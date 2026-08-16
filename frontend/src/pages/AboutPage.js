@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/AboutPage.css';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
-function AboutPage({ isDarkMode, toggleTheme }) {
+function AboutPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState('whoIAm');
   const [isFlipped, setIsFlipped] = useState(false);
@@ -79,9 +77,8 @@ function AboutPage({ isDarkMode, toggleTheme }) {
   };
 
   return (
-    <div className={`about-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
-      <main className={`about-container ${isVisible ? 'fade-in' : ''}`}>
+    <div className="about-page">
+      <div className={`about-container ${isVisible ? 'fade-in' : ''}`}>
         <section className="about-section">
           <h1 
             ref={titleRef} 
@@ -248,8 +245,7 @@ function AboutPage({ isDarkMode, toggleTheme }) {
             </div>
           </div>
         </section>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }

@@ -1,0 +1,27 @@
+.site-shell {
+  min-height: 100vh;
+  background: var(--void);
+}
+
+/* The world sits behind everything and never receives pointer events. */
+.site-world {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-world);
+  pointer-events: none;
+}
+
+.site-world canvas {
+  display: block;
+}
+
+.site-content {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+/* Nav is hidden for the duration of the opening cinematic. */
+.site-shell[data-intro='playing'] .navbar-container {
+  opacity: 0;
+  pointer-events: none;
+}

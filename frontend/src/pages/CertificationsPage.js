@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FaGraduationCap, FaCertificate, FaExternalLinkAlt, FaCalendarAlt } from 'react-icons/fa';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import '../styles/CertificationsPage.css';
+import { buildApiUrl } from '../config/api';
 
-function CertificationsPage({ isDarkMode, toggleTheme }) {
+function CertificationsPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [certifications, setCertifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +33,7 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
     const fetchCertifications = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://hollai-backend-b31l.onrender.com/api/certifications');
+        const response = await fetch(buildApiUrl('/certifications'));
         
         if (!response.ok) {
           throw new Error('Failed to fetch certifications');
@@ -60,9 +59,8 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
   const otherCertifications = certifications.filter(cert => !cert.featured);
 
   return (
-    <div className={`certifications-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
-      <main className={`certifications-container ${isVisible ? 'fade-in' : ''}`}>
+    <div className="certifications-page">
+      <div className={`certifications-container ${isVisible ? 'fade-in' : ''}`}>
         <h1 className="certifications-title">My <span className="highlight">Certifications</span></h1>
         <p className="certifications-subtitle">Credentials validating my expertise in AI and machine learning</p>
         
@@ -183,8 +181,7 @@ function CertificationsPage({ isDarkMode, toggleTheme }) {
             )}
           </>
         )}
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }
