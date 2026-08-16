@@ -107,6 +107,7 @@ const projectRoutes = require('./routes/projects');
 const emailsRoutes = require('./routes/emails');
 const testRoutes = require('./routes/test');
 const certificationRoutes = require('./routes/certifications');
+const uploadRoutes = require('./routes/upload');
 
 app.use('/api/auth/login', loginLimiter);
 app.use('/api/auth', authRoutes);
@@ -114,6 +115,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/emails', emailsRoutes);
 app.use('/api/test-db', testRoutes);
 app.use('/api/certifications', certificationRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
