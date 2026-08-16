@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 // Load environment variables
 dotenv.config();
@@ -15,14 +17,29 @@ if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 16) {
 // Create Express app
 const app = express();
 
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://hollai.netlify.app'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { message: 'Too many login attempts. Try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(helmet());
 app.use(express.json());
 app.use(morgan('dev'));
-
-// MongoDB Connection with detailed logging
-console.log('Attempting to connect to MongoDB with URI:', 
-  process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 20) + '...' : 'undefined');
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -30,17 +47,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
 .then(() => {
   console.log('MongoDB connected successfully');
-  // List all collections to verify connection
-  mongoose.connection.db.listCollections().toArray((err, collections) => {
-    if (err) {
-      console.error('Error listing collections:', err);
-    } else {
-      console.log('Available collections:');
-      collections.forEach(collection => {
-        console.log(`- ${collection.name}`);
-      });
-    }
-  });
 })
 .catch((err) => {
   console.error('MongoDB connection error details:', {
@@ -84,31 +90,26 @@ app.get('/api/db-test', async (req, res) => {
 
 // Test endpoint
 app.get('/test', (req, res) => {
-  console.log('Test endpoint hit');
-  res.json({ 
+  res.json({
     message: 'Server is running',
-    timestamp: new Date().toISOString(),
-    env: {
-      NODE_ENV: process.env.NODE_ENV,
-      PORT: process.env.PORT,
-      EMAIL_USER: process.env.EMAIL_USER ? 'Email user is set' : 'Email user is not set',
-      EMAIL_TO: process.env.EMAIL_TO ? 'Email to is set' : 'Email to is not set'
-    }
+    timestamp: new Date().toISOString()
   });
 });
 
 // Basic route
 app.get('/', (req, res) => {
-  console.log('Root endpoint hit');
   res.json({ message: 'Welcome to Hollai Portfolio API' });
 });
 
 // Import routes
+const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const emailsRoutes = require('./routes/emails');
 const testRoutes = require('./routes/test');
 const certificationRoutes = require('./routes/certifications');
 
+app.use('/api/auth/login', loginLimiter);
+app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/emails', emailsRoutes);
 app.use('/api/test-db', testRoutes);
