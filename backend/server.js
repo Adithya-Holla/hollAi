@@ -7,6 +7,11 @@ const dotenv = require('dotenv');
 // Load environment variables
 dotenv.config();
 
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 16) {
+  console.error('FATAL: JWT_SECRET is missing or too short. Set a strong JWT_SECRET in backend/.env before starting the server.');
+  process.exit(1);
+}
+
 // Create Express app
 const app = express();
 
