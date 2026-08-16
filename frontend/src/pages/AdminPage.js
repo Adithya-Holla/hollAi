@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { clearToken } from '../utils/authClient';
 import { useNavigate } from 'react-router-dom';
 import ProjectsAdmin from '../components/admin/ProjectsAdmin';
+import CertificationsAdmin from '../components/admin/CertificationsAdmin';
 import '../styles/AdminPage.css';
 
 function AdminPage() {
@@ -21,6 +22,7 @@ function AdminPage() {
         <button onClick={handleLogout} style={{ marginLeft: 'auto' }}>Log out</button>
       </div>
       {tab === 'projects' && <ProjectsAdmin />}
+      {tab === 'certifications' && <CertificationsAdmin />}
     </div>
   );
 }
