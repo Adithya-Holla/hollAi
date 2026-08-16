@@ -6,6 +6,9 @@ import AboutPage from './pages/AboutPage';
 import ProjectsPage from './pages/ProjectsPage';
 import CertificationsPage from './pages/CertificationsPage';
 import ContactPage from './pages/ContactPage';
+import AdminLoginPage from './pages/AdminLoginPage';
+import AdminPage from './pages/AdminPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true); // Set dark mode as default
@@ -34,6 +37,8 @@ function App() {
         <Route path="/projects" element={<ProjectsPage isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
         <Route path="/certifications" element={<CertificationsPage isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
         <Route path="/contact" element={<ContactPage isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
       </Routes>
     </Router>
   );
