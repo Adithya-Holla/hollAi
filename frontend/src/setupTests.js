@@ -18,6 +18,15 @@ if (typeof global.IntersectionObserver === 'undefined') {
   };
 }
 
+// react-use-measure (via R3F's Canvas) requires it and jsdom has none.
+if (typeof global.ResizeObserver === 'undefined') {
+  global.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+}
+
 if (typeof window.matchMedia === 'undefined') {
   window.matchMedia = (query) => ({
     matches: false,

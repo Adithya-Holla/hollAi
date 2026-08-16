@@ -6,6 +6,9 @@ import { useScrollProgress } from '../../hooks/useScrollProgress';
 import { sceneState } from '../../state/scene';
 import '../../styles/SiteShell.css';
 
+// Code-split: three + drei must never land in the main bundle.
+const WorldCanvas = React.lazy(() => import('../../three/world/WorldCanvas'));
+
 /**
  * Layout route for every public page.
  *
@@ -28,7 +31,11 @@ function SiteShell() {
       <a className="skip-link" href="#main">Skip to content</a>
 
       <div className="site-world" aria-hidden="true">
-        {/* WorldCanvas mounts here in Task 4 */}
+        {/* Fallback is null on purpose: every word of text paints before any
+            3D arrives. */}
+        <React.Suspense fallback={null}>
+          <WorldCanvas />
+        </React.Suspense>
       </div>
 
       <div className="site-content">
