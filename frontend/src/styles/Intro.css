@@ -1,0 +1,40 @@
+.intro-layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-intro);
+  background: var(--void);
+}
+
+/* Once the halves start moving, the layer itself must stop painting black or
+   nothing shows through the widening gap. */
+.intro-layer.is-tearing {
+  background: transparent;
+}
+
+.intro-skip {
+  position: fixed;
+  right: var(--gutter);
+  bottom: var(--gutter);
+  z-index: calc(var(--z-intro) + 1);
+  border: 0;
+  background: none;
+  padding: 0.5rem;
+  color: var(--smoke);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out), color 0.2s linear;
+}
+
+.intro-skip.is-shown {
+  opacity: 0.55;
+}
+
+.intro-skip:hover,
+.intro-skip:focus-visible {
+  color: var(--signal);
+  opacity: 1;
+}
