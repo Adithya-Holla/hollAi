@@ -56,8 +56,6 @@ function ContactPage({ isDarkMode, toggleTheme }) {
         throw new Error('Failed to send message');
       }
 
-      const data = await response.json();
-      
       setFormStatus({
         submitted: true,
         error: false,

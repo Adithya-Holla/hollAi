@@ -1,0 +1,67 @@
+/*
+ * Typography — Archivo (variable, with width axis) + JetBrains Mono.
+ * The @font-face declarations are pulled in from src/index.js so webpack
+ * resolves the packaged woff2 files. Nothing is fetched from a CDN.
+ */
+
+:root {
+  --font-display: 'Archivo Variable', 'Arial Narrow', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+/* Large statements: heavy, condensed, tightly tracked. */
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 88%;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  color: var(--bone);
+  margin: 0;
+}
+
+/* Technical metadata: small, wide-tracked, quiet. */
+.t-mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--step--1);
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--smoke);
+}
+
+/* Reading copy. Measure-limited on purpose — whitespace is used aggressively. */
+.t-body {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-stretch: 100%;
+  font-size: var(--step-0);
+  letter-spacing: 0;
+  line-height: 1.65;
+  text-transform: none;
+  color: var(--smoke);
+  max-width: var(--measure);
+}
+
+.t-body strong {
+  color: var(--bone);
+  font-weight: 600;
+}
+
+/* Section labels sitting above a display line. */
+.t-eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--step--1);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--smoke);
+  display: block;
+}
+
+::selection {
+  background: var(--signal);
+  color: var(--bone);
+}

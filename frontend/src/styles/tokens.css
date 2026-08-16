@@ -1,0 +1,59 @@
+/*
+ * Design tokens — hollAI cinematic redesign.
+ * See docs/superpowers/specs/2026-08-17-cinematic-frontend-redesign-design.md §4
+ *
+ * Do not add colours to this palette. The restraint is the design.
+ */
+
+:root {
+  /* Palette */
+  --void: #000000;      /* intro ground, page ground */
+  --ink: #0a0a0b;       /* surfaces */
+  --charcoal: #141416;  /* raised surfaces */
+  --graphite: #1e1e21;  /* rules, borders, hairlines */
+  --smoke: #6b6b70;     /* muted text, metadata */
+  --bone: #e8e6e1;      /* primary text — never pure white */
+  --signal: #c4161c;    /* red — deep lacquer, not neon */
+
+  /* Red is permitted in exactly three places sitewide:
+     the tear seam, the active nav indicator, and hover/focus states. */
+
+  /* Fluid type scale */
+  --step--1: clamp(0.69rem, 0.67rem + 0.1vw, 0.75rem);
+  --step-0: clamp(0.88rem, 0.84rem + 0.18vw, 1rem);
+  --step-1: clamp(1.05rem, 0.97rem + 0.39vw, 1.33rem);
+  --step-2: clamp(1.26rem, 1.11rem + 0.73vw, 1.78rem);
+  --step-3: clamp(1.51rem, 1.27rem + 1.23vw, 2.37rem);
+  --step-4: clamp(1.81rem, 1.43rem + 1.94vw, 3.16rem);
+  --step-5: clamp(2.18rem, 1.59rem + 2.94vw, 4.21rem);
+  --step-6: clamp(2.61rem, 1.73rem + 4.4vw, 5.61rem);
+
+  /* Rhythm */
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --measure: 62ch;
+  --rule: 1px solid var(--graphite);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.25s;
+  --dur-mid: 0.6s;
+  --dur-slow: 0.9s;
+
+  /* Layers */
+  --z-world: 0;
+  --z-content: 1;
+  --z-nav: 50;
+  --z-overlay: 90;
+  --z-intro: 200;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ease-out: linear;
+    --ease-in-out: linear;
+    --dur-fast: 0.01s;
+    --dur-mid: 0.01s;
+    --dur-slow: 0.01s;
+  }
+}
