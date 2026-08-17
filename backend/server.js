@@ -17,12 +17,30 @@ if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 16) {
 // Create Express app
 const app = express();
 
+/*
+ * Allowed browser origins.
+ *
+ * This list must contain wherever the frontend is actually served from. The
+ * deployed site runs at hollai.onrender.com; omitting it blocks every API
+ * call from the live frontend, since the previous deployment used a wide
+ * open cors() and never needed an allowlist.
+ *
+ * CORS_ORIGINS overrides the defaults as a comma-separated list, so a new
+ * domain does not need a code change.
+ */
+const DEFAULT_ORIGINS = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://hollai.onrender.com',
+  'https://hollai.netlify.app'
+];
+
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(',').map((o) => o.trim()).filter(Boolean)
+  : DEFAULT_ORIGINS;
+
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'https://hollai.netlify.app'
-  ],
+  origin: allowedOrigins,
   credentials: true,
   optionsSuccessStatus: 200
 };
