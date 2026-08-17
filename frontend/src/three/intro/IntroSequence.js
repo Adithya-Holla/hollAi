@@ -30,6 +30,22 @@ function IntroStage({ quality, reduced, onDone, onTear }) {
   const lowerMat = useRef();
   const upperMat = useRef();
 
+  /*
+   * The callbacks are held in refs and the timeline effect does not depend on
+   * them.
+   *
+   * They fire mid-sequence and set state upstream, so their identity can
+   * change while the timeline is still running. With them in the dependency
+   * array that rebuilt the timeline from zero and the whole cinematic played
+   * a second time. The timeline must be built exactly once per mount.
+   */
+  const onDoneRef = useRef(onDone);
+  const onTearRef = useRef(onTear);
+  useEffect(() => {
+    onDoneRef.current = onDone;
+    onTearRef.current = onTear;
+  });
+
   // Keyed rather than an array, so repeated ref callbacks overwrite instead
   // of accumulating duplicates across renders.
   const eyeMaterials = useMemo(() => new Map(), []);
@@ -53,12 +69,12 @@ function IntroStage({ quality, reduced, onDone, onTear }) {
       eyeMaterials.forEach(({ material, kind }) => {
         material.opacity = EYE_OPACITY[kind];
       });
-      onTear();
-      const t = setTimeout(onDone, 1100);
+      onTearRef.current();
+      const t = setTimeout(() => onDoneRef.current(), 1100);
       return () => clearTimeout(t);
     }
 
-    const tl = gsap.timeline({ onComplete: onDone });
+    const tl = gsap.timeline({ onComplete: () => onDoneRef.current() });
 
     // 0.0 – 0.6 · darkness. Nothing at all.
 
@@ -91,7 +107,7 @@ function IntroStage({ quality, reduced, onDone, onTear }) {
      * shows through the widening gap — and opens the hero's gate, so the
      * wordmark reveals against the separation rather than during the draw.
      */
-    tl.call(onTear, undefined, SPLIT_AT);
+    tl.call(() => onTearRef.current(), undefined, SPLIT_AT);
 
     // 3.2 – 4.2 · the tear
     const lower = lowerRef.current;
@@ -150,7 +166,7 @@ function IntroStage({ quality, reduced, onDone, onTear }) {
       tl.kill();
       if (process.env.NODE_ENV !== 'production') delete window.__introTimeline;
     };
-  }, [reduced, quality, onDone, onTear, eyeMaterials]);
+  }, [reduced, quality, eyeMaterials]);
 
   return (
     <>

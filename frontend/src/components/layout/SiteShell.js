@@ -49,6 +49,11 @@ function SiteShell() {
   // React subscription.
   sceneState.introPlaying = introPlaying;
 
+  // Stable identity. Passed inline this re-created itself on every render,
+  // which changed a prop the intro's timeline effect depended on and made the
+  // whole sequence restart mid-tear.
+  const handleTearStart = useCallback(() => setIntroTearing(true), []);
+
   const handleIntroComplete = useCallback(() => {
     markIntroSeen(window.sessionStorage);
     sceneState.introDone = true;
@@ -108,7 +113,7 @@ function SiteShell() {
           <IntroSequence
             quality={quality}
             onComplete={handleIntroComplete}
-            onTearStart={() => setIntroTearing(true)}
+            onTearStart={handleTearStart}
           />
         </React.Suspense>
       )}

@@ -39,7 +39,7 @@ const SWEEP_END = 2.7;
  * you actually see is a thin highlight tracing the rim. Neutral, so those
  * highlights stay white instead of picking up a tint.
  */
-const FRAME_COLOR = '#232322';
+const FRAME_COLOR = '#34332f';
 
 /**
  * The continuous background motion on Home.
