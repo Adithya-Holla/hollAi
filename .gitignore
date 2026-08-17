@@ -35,15 +35,7 @@ logs/
 *.log
 
 # Misc
-.DS_Store
 .cache/
 coverage/
-
-# Strange files created accidentally
-"h origin master:main"
-"h origin main"
-"h origin main * Write-Output*"
-"hell -File git-push.ps1"
-"frontend/h origin master:main"
-ersHOLLADocumentshollai shots/
 .playwright-mcp/
+shots/
