@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { lensShape, frameTubeGeometry, LENS_W, GAP, CX } from '../lensShape';
+import { gazeAt, blinkAt } from '../gaze';
 
 /**
  * The frame as swept tube geometry rather than a flat outline, so the sweep
@@ -129,13 +131,31 @@ function IntroEnvironment() {
  *                 the timeline to fade in
  */
 function Spectacles({ quality, sweepRef, eyeRef, collect }) {
+  const gazeRef = useRef();
+
+  /*
+   * The gaze lives on an inner group so it never fights the intro timeline,
+   * which animates scale on the outer one. Position here, scale there.
+   */
+  useFrame((state) => {
+    const g = gazeRef.current;
+    if (!g) return;
+    const t = state.clock.elapsedTime;
+    const { x, y } = gazeAt(t, { amplitude: 0.03, drift: 0.15 });
+    g.position.x = x;
+    g.position.y = y;
+    g.scale.y = blinkAt(t);
+  });
+
   return (
     <group>
       <IntroEnvironment />
 
       <group ref={eyeRef}>
-        <Eye cx={-CX} collect={collect} />
-        <Eye cx={CX} collect={collect} />
+        <group ref={gazeRef}>
+          <Eye cx={-CX} collect={collect} />
+          <Eye cx={CX} collect={collect} />
+        </group>
       </group>
 
       <Frame cx={-CX} />

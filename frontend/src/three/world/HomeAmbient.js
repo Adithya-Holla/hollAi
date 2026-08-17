@@ -2,6 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { frameTubeGeometry, lensGeometry, CX } from '../lensShape';
 import LensSweep from './LensSweep';
+import { gazeAt, blinkAt } from '../gaze';
 import { sceneState } from '../../state/scene';
 
 
@@ -55,6 +56,7 @@ const FRAME_COLOR = '#34332f';
 function HomeAmbient({ quality }) {
   const groupRef = useRef();
   const lightRef = useRef();
+  const gazeRef = useRef();
 
   const geometryL = useMemo(() => frameTubeGeometry(-CX, 0.022, 200), []);
   const geometryR = useMemo(() => frameTubeGeometry(CX, 0.022, 200), []);
@@ -87,6 +89,18 @@ function HomeAmbient({ quality }) {
       lightRef.current.position.x = Math.sin(t * 0.24) * 0.7;
       lightRef.current.position.z = Math.cos(t * 0.24) * 0.3 + 0.55;
       lightRef.current.position.y = 0.5 + Math.sin(t * 0.33) * 0.12;
+    }
+
+    /*
+     * The eyes keep looking around: hold, flick to a new point, hold again,
+     * with the occasional blink. A different seed from the intro's pair so
+     * the two are never in lockstep.
+     */
+    if (gazeRef.current) {
+      const { x, y } = gazeAt(t, { seed: 23, amplitude: 0.055, drift: 0.12 });
+      gazeRef.current.position.x = x;
+      gazeRef.current.position.y = 0.01 + y;
+      gazeRef.current.scale.y = blinkAt(t, { every: 6.1 });
     }
 
     /*
@@ -164,6 +178,32 @@ function HomeAmbient({ quality }) {
        * and a light passing them can produce a glint but never a sweep —
        * there is simply no surface for a reflection to travel across.
        */}
+      {/*
+       * Eyes behind the glass. Kept to two dim points — at this distance they
+       * are barely more than a suggestion, which is the intent: the figure is
+       * present and looking around, not staring out of the page.
+       */}
+      {/*
+       * Sits just in FRONT of the lens face, not behind it. The lens is
+       * opaque here — it has to be, or it joins the transparent pass and
+       * hides the sweep — so anything behind it is simply not drawn.
+       *
+       * Note the lens and sweep are tilted about Y and offset in x, which
+       * pushes their real depth forward by ~0.05; this group is not rotated,
+       * so its z has to clear that rather than the lens's nominal position.
+       * The sweep still sits nearer, so the reflection passes over the eyes.
+       */}
+      <group ref={gazeRef} position={[0, 0.01, 0.02]} renderOrder={10}>
+        <mesh position={[-CX, 0, 0]} renderOrder={10}>
+          <circleGeometry args={[0.042, 24]} />
+          <meshBasicMaterial color="#8e8b85" transparent opacity={0.55} depthWrite={false} />
+        </mesh>
+        <mesh position={[CX, 0, 0]} renderOrder={10}>
+          <circleGeometry args={[0.042, 24]} />
+          <meshBasicMaterial color="#8e8b85" transparent opacity={0.55} depthWrite={false} />
+        </mesh>
+      </group>
+
       <mesh geometry={lensL} position={[0, 0, -0.08]} rotation={[0, 0.13, 0]}>
         <meshPhysicalMaterial
           color="#0b0b0b"
