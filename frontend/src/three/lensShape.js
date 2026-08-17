@@ -5,9 +5,9 @@ export const LENS_H = 0.36;
 export const GAP = 0.18;
 export const CX = (LENS_W + GAP) / 2;
 
-/** Rounded rectangle centred on cx, as a THREE.Shape or Path. */
-function roundedRect(Ctor, cx, halfW, halfH, r) {
-  const p = new Ctor();
+/** Rounded rectangle centred on cx. */
+function roundedRect(cx, halfW, halfH, r) {
+  const p = new THREE.Shape();
   const w = halfW;
   const h = halfH;
   const rad = Math.min(r, w, h);
@@ -27,7 +27,7 @@ function roundedRect(Ctor, cx, halfW, halfH, r) {
 
 /** Rounded-rectangle outline for one lens, centred on cx. */
 export function lensShape(cx) {
-  return roundedRect(THREE.Shape, cx, LENS_W / 2, LENS_H / 2, 0.075);
+  return roundedRect(cx, LENS_W / 2, LENS_H / 2, 0.075);
 }
 
 /**
@@ -64,20 +64,3 @@ export function frameTubeGeometry(cx, radius = 0.016, tubularSegments = 200) {
   return new THREE.TubeGeometry(curve, tubularSegments, radius, 8, true);
 }
 
-/**
- * Frame as a flat ring in the lens plane — the rounded rectangle with a
- * slightly smaller one punched out of it.
- *
- * Used by the background object, which is drawn unlit in a single flat
- * colour. A swept tube is wrong there: TubeGeometry orients its cross-section
- * with Frenet frames, which twist along a nearly-planar curve. Under a dark
- * shaded material that is invisible, but on a flat colour the twist changes
- * the silhouette width and the outline reads as ragged. A ring is exactly
- * even the whole way round.
- */
-export function frameGeometry(cx, width = 0.022) {
-  const outer = roundedRect(THREE.Shape, cx, LENS_W / 2 + width, LENS_H / 2 + width, 0.075 + width);
-  const inner = roundedRect(THREE.Path, cx, LENS_W / 2, LENS_H / 2, 0.075);
-  outer.holes.push(inner);
-  return new THREE.ShapeGeometry(outer, 24);
-}
