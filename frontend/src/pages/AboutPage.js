@@ -84,7 +84,7 @@ function AboutPage() {
 
   return (
     <div className="about-page">
-      <div className={`about-container ${isVisible ? 'fade-in' : ''}`}>
+      <div className={`about-container tex-grid ${isVisible ? 'fade-in' : ''}`}>
         <header
           ref={titleRef}
           className={`page-head about-head ${titleIn ? 'element-visible' : ''}`}

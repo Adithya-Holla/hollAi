@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
+import { Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import { advanceCamera } from './cameraRig';
 import { sceneState } from '../../state/scene';
+import HomeAmbient from './HomeAmbient';
 
 const shaftVertex = `
   varying vec2 vUv;
@@ -66,7 +68,26 @@ const BASE_FOG = 0.055;
  * The entire world: a floor, fog, one key light, one red rim.
  * Deliberately nothing else — no spheres, no cubes, no particle fields.
  */
-function BaseScene({ quality }) {
+/**
+ * One-time cube map so the floor and the ambient geometry have something to
+ * reflect. Metal under a lone directional light renders near-black.
+ */
+function WorldEnvironment() {
+  return (
+    <Environment resolution={64} frames={1}>
+      <mesh scale={80}>
+        <sphereGeometry args={[1, 20, 20]} />
+        <meshBasicMaterial color="#050509" side={THREE.BackSide} />
+      </mesh>
+      <mesh position={[-14, 8, -10]} rotation={[0, 0.5, 0.3]}>
+        <planeGeometry args={[6, 30]} />
+        <meshBasicMaterial color="#5c6474" />
+      </mesh>
+    </Environment>
+  );
+}
+
+function BaseScene({ quality, route }) {
   const keyRef = useRef();
   const fogRef = useRef();
   const { camera } = useThree();
@@ -117,7 +138,12 @@ function BaseScene({ quality }) {
         <meshStandardMaterial color="#0A0A0C" roughness={0.62} metalness={0.55} />
       </mesh>
 
+      <WorldEnvironment />
+
       {quality === 'high' && <LightShaft />}
+
+      {/* Continuous background motion, Home only. */}
+      {route === '/' && <HomeAmbient quality={quality} />}
     </>
   );
 }

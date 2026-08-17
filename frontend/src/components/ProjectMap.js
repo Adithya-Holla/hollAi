@@ -214,7 +214,7 @@ function ProjectMap({ projects }) {
                   {project.imageUrl ? (
                     <img src={project.imageUrl} alt={project.title} loading="lazy" />
                   ) : (
-                    <div className="opmap-plate t-mono" aria-hidden="true">
+                    <div className="opmap-plate t-mono tex-hatch" aria-hidden="true">
                       {number} / HOLLAI
                     </div>
                   )}

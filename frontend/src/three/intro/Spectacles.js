@@ -1,44 +1,14 @@
 import React, { useMemo } from 'react';
 import * as THREE from 'three';
 import { Environment } from '@react-three/drei';
-
-const LENS_W = 0.62;
-const LENS_H = 0.36;
-const GAP = 0.18;
-const CX = (LENS_W + GAP) / 2;
-
-/** Rounded-rectangle outline for one lens, centred on cx. */
-function lensShape(cx) {
-  const shape = new THREE.Shape();
-  const w = LENS_W / 2;
-  const h = LENS_H / 2;
-  const r = 0.075;
-
-  shape.moveTo(cx - w + r, -h);
-  shape.lineTo(cx + w - r, -h);
-  shape.quadraticCurveTo(cx + w, -h, cx + w, -h + r);
-  shape.lineTo(cx + w, h - r);
-  shape.quadraticCurveTo(cx + w, h, cx + w - r, h);
-  shape.lineTo(cx - w + r, h);
-  shape.quadraticCurveTo(cx - w, h, cx - w, h - r);
-  shape.lineTo(cx - w, -h + r);
-  shape.quadraticCurveTo(cx - w, -h, cx - w + r, -h);
-
-  return shape;
-}
+import { lensShape, frameGeometry, LENS_W, GAP, CX } from '../lensShape';
 
 /**
  * The frame as swept tube geometry rather than a flat outline, so the sweep
  * light in the intro timeline produces a real moving specular along it.
  */
 function Frame({ cx }) {
-  const geometry = useMemo(() => {
-    const pts = lensShape(cx)
-      .getPoints(72)
-      .map((p) => new THREE.Vector3(p.x, p.y, 0));
-    const curve = new THREE.CatmullRomCurve3(pts, true);
-    return new THREE.TubeGeometry(curve, 200, 0.016, 8, true);
-  }, [cx]);
+  const geometry = useMemo(() => frameGeometry(cx), [cx]);
 
   return (
     <mesh geometry={geometry}>

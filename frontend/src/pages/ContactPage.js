@@ -90,7 +90,7 @@ function ContactPage() {
 
   return (
     <div className="contact-page">
-      <div className="contact-container">
+      <div className="contact-container tex-grid">
         <header className="page-head">
           <span className="t-mono">Final transmission</span>
           <h1 className="page-title">Get in <span className="contact-mark">Touch</span></h1>

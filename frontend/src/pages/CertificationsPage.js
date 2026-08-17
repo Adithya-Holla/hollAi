@@ -104,7 +104,7 @@ function CertificationsPage() {
 
   return (
     <div className="certifications-page">
-      <div className={`certifications-container ${isVisible ? 'fade-in' : ''}`}>
+      <div className={`certifications-container tex-grid ${isVisible ? 'fade-in' : ''}`}>
         <header className="page-head">
           <span className="t-mono">Credentials on record</span>
           <h1 className="page-title">Certifications</h1>

@@ -114,7 +114,7 @@ function HomePage() {
         </button>
       </section>
 
-      <section className="projects-section" ref={projectsRef}>
+      <section className="projects-section tex-grid" ref={projectsRef}>
         <div className="section-head">
           <span className="t-mono">Selected work</span>
           <h2 className="section-title">Recent Projects</h2>
@@ -176,7 +176,7 @@ function HomePage() {
                   {project.imageUrl ? (
                     <img src={project.imageUrl} alt={project.title} loading="lazy" />
                   ) : (
-                    <div className="preview-plate t-mono" aria-hidden="true">
+                    <div className="preview-plate t-mono tex-hatch" aria-hidden="true">
                       <FaCode />
                     </div>
                   )}

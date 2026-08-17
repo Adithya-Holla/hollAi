@@ -15,6 +15,7 @@ export const sceneState = {
   progress: 0,
   pointer: { x: 0, y: 0 },
   route: '/',
+  introPlaying: false,
   introDone: false,
   quality: 'high',
   hoveredRow: -1,
@@ -44,6 +45,7 @@ export function resetScene() {
   sceneState.pointer.x = 0;
   sceneState.pointer.y = 0;
   sceneState.route = '/';
+  sceneState.introPlaying = false;
   sceneState.introDone = false;
   sceneState.quality = 'high';
   sceneState.hoveredRow = -1;

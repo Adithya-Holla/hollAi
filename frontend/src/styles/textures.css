@@ -1,0 +1,101 @@
+/*
+ * Surface texture.
+ *
+ * Three layers, all cheap and all pure CSS. The rule they follow: texture
+ * should be felt before it is noticed. Every value here is deliberately at
+ * the edge of visibility — if a layer reads as a visible pattern rather than
+ * as grain in the surface, it is too strong.
+ */
+
+/* ── Column rules ─────────────────────────────────────────────────────── */
+
+/*
+ * Editorial column lines, fixed behind the content and above the 3D world.
+ * Gives every page an underlying structure to sit on instead of floating
+ * on flat black.
+ */
+.site-columns {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-world);
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    rgba(232, 230, 225, 0.032) 0 1px,
+    transparent 1px
+  );
+  background-size: calc(100% / 6) 100%;
+  /* Fade at the top and bottom so the lines do not terminate hard. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 767px) {
+  .site-columns {
+    background-size: calc(100% / 3) 100%;
+  }
+}
+
+/* ── Survey grid ──────────────────────────────────────────────────────── */
+
+/* Applied to page containers. The horizontal counterpart to the columns. */
+.tex-grid {
+  background-image:
+    linear-gradient(to right, rgba(232, 230, 225, 0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(232, 230, 225, 0.022) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+
+@media (max-width: 767px) {
+  .tex-grid {
+    background-size: 56px 56px;
+  }
+}
+
+/* ── Hatching ─────────────────────────────────────────────────────────── */
+
+/*
+ * Fine diagonal hatch for panels that need to read as a surface rather than
+ * a hole — image placeholders, empty states, the closing block on Contact.
+ */
+.tex-hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(232, 230, 225, 0.028) 0 1px,
+    transparent 1px 7px
+  );
+}
+
+/* ── Scanline ─────────────────────────────────────────────────────────── */
+
+/*
+ * A one-pixel horizontal repeat, far too fine to read as stripes but enough
+ * to stop large dark areas looking like flat fill. Kept off small screens,
+ * where the pattern can alias against the device pixel grid.
+ */
+@media (min-width: 768px) {
+  .tex-scan::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.16) 0 1px,
+      transparent 1px 3px
+    );
+    opacity: 0.5;
+  }
+}

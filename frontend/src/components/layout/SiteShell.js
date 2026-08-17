@@ -44,9 +44,14 @@ function SiteShell() {
       })
   );
 
+  // Mirrored into the scene state so the render loop can read it without a
+  // React subscription.
+  sceneState.introPlaying = introPlaying;
+
   const handleIntroComplete = useCallback(() => {
     markIntroSeen(window.sessionStorage);
     sceneState.introDone = true;
+    sceneState.introPlaying = false;
     setIntroPlaying(false);
   }, []);
 
@@ -74,9 +79,12 @@ function SiteShell() {
         {/* Fallback is null on purpose: every word of text paints before any
             3D arrives. */}
         <React.Suspense fallback={null}>
-          <WorldCanvas />
+          <WorldCanvas route={location.pathname} />
         </React.Suspense>
       </div>
+
+      {/* Column rules sit above the world and below the content. */}
+      <div className="site-columns" aria-hidden="true" />
 
       <div className="site-content">
         <Navbar />

@@ -9,7 +9,7 @@ import { sceneState } from '../../state/scene';
  * The one persistent canvas. Mounted by SiteShell and never unmounted, so
  * navigating between routes is a camera move rather than a context teardown.
  */
-function WorldCanvas() {
+function WorldCanvas({ route }) {
   const quality = useMemo(() => {
     const q = resolveQualityFromEnvironment();
     sceneState.quality = q;
@@ -42,7 +42,7 @@ function WorldCanvas() {
         camera={{ position: [0, 1.4, 6], fov: 42 }}
         gl={{ antialias: false, powerPreference: 'low-power' }}
       >
-        <BaseScene quality="low" />
+        <BaseScene quality="low" route={route} />
       </Canvas>
     );
   }
@@ -54,7 +54,7 @@ function WorldCanvas() {
       camera={{ position: [0, 1.4, 6], fov: 42 }}
       gl={{ antialias: quality === 'high', powerPreference: 'high-performance' }}
     >
-      <BaseScene quality={quality} />
+      <BaseScene quality={quality} route={route} />
       <AdaptiveDpr pixelated />
     </Canvas>
   );

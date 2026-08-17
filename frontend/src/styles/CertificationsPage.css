@@ -1,7 +1,26 @@
+/*
+ * This page is dense — eleven records, each with a description and a skill
+ * list. It runs a step smaller than Home and Projects throughout so the list
+ * can be scanned rather than scrolled through.
+ */
 .certifications-container {
-  padding: 11rem var(--gutter) 8rem;
+  padding: 8.5rem var(--gutter) 6rem;
+  max-width: 84rem;
   opacity: 0;
   transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.certifications-container .page-head {
+  margin-bottom: 3.5rem;
+}
+
+.certifications-container .page-title {
+  font-size: var(--step-4);
+}
+
+.certifications-container .page-subtitle {
+  margin-top: 1rem;
+  font-size: var(--step--1);
 }
 
 .certifications-container.fade-in {
@@ -18,10 +37,10 @@
 
 .record {
   display: grid;
-  grid-template-columns: 5rem minmax(0, 1fr) auto;
-  gap: 2.5rem;
+  grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+  gap: 1.75rem;
   align-items: start;
-  padding: 3rem 0;
+  padding: 1.75rem 0;
   border-top: var(--rule);
   opacity: 0;
   transform: translateY(20px);
@@ -51,17 +70,17 @@
 
 .record--featured .record-index {
   color: var(--smoke);
-  font-size: var(--step-3);
+  font-size: var(--step-1);
 }
 
 .record--featured .record-title {
-  font-size: var(--step-3);
+  font-size: var(--step-2);
 }
 
 .record-index {
-  font-size: var(--step-2);
+  font-size: var(--step-0);
   color: var(--graphite);
-  line-height: 1;
+  line-height: 1.3;
   transition: color var(--dur-mid) var(--ease-out);
 }
 
@@ -73,12 +92,12 @@
   font-family: var(--font-display);
   font-weight: 900;
   font-stretch: 88%;
-  font-size: var(--step-2);
-  letter-spacing: -0.028em;
-  line-height: 1.02;
+  font-size: var(--step-1);
+  letter-spacing: -0.022em;
+  line-height: 1.08;
   text-transform: uppercase;
   color: var(--bone);
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.4rem;
 }
 
 .record-org {
@@ -87,24 +106,32 @@
 }
 
 .record-desc {
-  margin: 1rem 0 0;
+  margin: 0.7rem 0 0;
+  font-size: var(--step--1);
+  line-height: 1.6;
+  max-width: 58ch;
 }
 
 .record-skills {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1.25rem;
-  margin: 1.25rem 0 0;
+  gap: 0.35rem 1rem;
+  margin: 0.85rem 0 0;
   padding: 0;
+}
+
+.record-skills li {
+  font-size: 0.65rem;
 }
 
 .record-meta {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 1rem;
+  gap: 0.6rem;
   text-align: right;
+  font-size: 0.68rem;
 }
 
 .record-date {
