@@ -1,0 +1,87 @@
+.cursor-ring,
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+}
+
+.cursor-ring.is-live,
+.cursor-dot.is-live {
+  opacity: 1;
+}
+
+/*
+ * difference blending means the ring inverts whatever it crosses — the bone
+ * wordmark, a project image, the dark floor — so it never needs a colour
+ * that happens to work on every surface.
+ */
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--bone);
+  border-radius: 50%;
+  mix-blend-mode: difference;
+  transition:
+    width 0.32s var(--ease-out),
+    height 0.32s var(--ease-out),
+    border-color 0.32s var(--ease-out),
+    opacity 0.3s linear;
+}
+
+/* Over anything interactive the ring opens and turns to the accent. */
+.cursor-ring.is-open {
+  width: 58px;
+  height: 58px;
+  border-color: var(--signal);
+  mix-blend-mode: normal;
+}
+
+.cursor-ring.is-pressed {
+  width: 24px;
+  height: 24px;
+}
+
+.cursor-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--bone);
+  mix-blend-mode: difference;
+  transition: opacity 0.3s linear;
+}
+
+/*
+ * The native cursor is hidden only once the custom one is actually running,
+ * so a browser that bails out of the effect is never left with no pointer at
+ * all. Text inputs and the resize handle keep their real cursors, where the
+ * shape carries meaning.
+ */
+.has-custom-cursor,
+.has-custom-cursor a,
+.has-custom-cursor button {
+  cursor: none;
+}
+
+.has-custom-cursor input,
+.has-custom-cursor textarea,
+.has-custom-cursor select {
+  cursor: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-ring,
+  .cursor-dot {
+    display: none;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-ring,
+  .cursor-dot {
+    display: none;
+  }
+}

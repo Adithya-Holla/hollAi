@@ -3,8 +3,9 @@ import { Link, useOutletContext } from 'react-router-dom';
 import '../styles/HomePage.css';
 import { buildApiUrl } from '../config/api';
 import RevealText from '../components/RevealText';
+import PreviewItem from '../components/PreviewItem';
 import { useInView } from '../hooks/useInView';
-import { FaChevronDown, FaGithub, FaExternalLinkAlt, FaCode, FaFolder } from 'react-icons/fa';
+import { FaChevronDown, FaFolder } from 'react-icons/fa';
 
 function HomePage() {
   const projectsRef = useRef(null);
@@ -133,55 +134,7 @@ function HomePage() {
         ) : (
           <ol className="preview-list">
             {projects.map((project, index) => (
-              <li key={project._id} className="preview-item">
-                <span className="preview-index t-mono">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-
-                <div className="preview-body">
-                  <h3 className="preview-title">{project.title}</h3>
-                  <p className="t-body preview-description">{project.description}</p>
-                  {project.technologies && project.technologies.length > 0 && (
-                    <ul className="preview-tech">
-                      {project.technologies.map((tech) => (
-                        <li key={tech} className="t-mono">{tech}</li>
-                      ))}
-                    </ul>
-                  )}
-                  <div className="preview-links">
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="t-mono inline-link"
-                      >
-                        <FaGithub aria-hidden="true" /> Code
-                      </a>
-                    )}
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="t-mono inline-link"
-                      >
-                        <FaExternalLinkAlt aria-hidden="true" /> Demo
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                <div className="preview-visual">
-                  {project.imageUrl ? (
-                    <img src={project.imageUrl} alt={project.title} loading="lazy" />
-                  ) : (
-                    <div className="preview-plate t-mono tex-hatch" aria-hidden="true">
-                      <FaCode />
-                    </div>
-                  )}
-                </div>
-              </li>
+              <PreviewItem key={project._id} project={project} index={index} />
             ))}
           </ol>
         )}

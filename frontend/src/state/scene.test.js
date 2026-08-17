@@ -57,6 +57,18 @@ describe('setPointer', () => {
     expect(sceneState.pointer.y).toBeCloseTo(-1);
   });
 
+  test('also records raw viewport pixels for DOM followers', () => {
+    setPointer(240, 130, 1000, 800);
+    expect(sceneState.pointerPx).toEqual({ x: 240, y: 130 });
+    expect(sceneState.pointerSeen).toBe(true);
+  });
+
+  test('mutates pointerPx in place too', () => {
+    const before = sceneState.pointerPx;
+    setPointer(10, 10, 1000, 800);
+    expect(sceneState.pointerPx).toBe(before);
+  });
+
   test('mutates in place rather than replacing the pointer object', () => {
     // useFrame closures capture sceneState.pointer by reference. Reassigning
     // the object would silently detach every consumer.
@@ -80,6 +92,8 @@ describe('resetScene', () => {
     expect(sceneState.progress).toBe(0);
     expect(sceneState.pointer.x).toBe(0);
     expect(sceneState.pointer.y).toBe(0);
+    expect(sceneState.pointerPx).toEqual({ x: 0, y: 0 });
+    expect(sceneState.pointerSeen).toBe(false);
     expect(sceneState.route).toBe('/');
     expect(sceneState.introDone).toBe(false);
     expect(sceneState.hoveredRow).toBe(-1);

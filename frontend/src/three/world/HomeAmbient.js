@@ -14,6 +14,25 @@ import { sceneState } from '../../state/scene';
  */
 const AMBIENT_LAYER = 1;
 
+/* Reflection pass: seconds between passes, and the share of that spent
+   travelling. The rest is idle, so it reads as a catch of light. */
+const SWEEP_PERIOD = 7;
+const SWEEP_FRACTION = 0.22;
+const SWEEP_PEAK = 78;
+
+/*
+ * Local-space start and end: top-left to bottom-right, just in front of the
+ * lenses so the highlight rakes across their face.
+ *
+ * Kept small on purpose. These are local units inside a group scaled ~3x, so
+ * they are tripled in world space — while a light's `distance` falloff is
+ * measured in world units and is NOT scaled with its parent. Generous local
+ * offsets put the light outside its own falloff radius, where it contributes
+ * exactly nothing.
+ */
+const SWEEP_FROM = [-1.2, 0.75, 0.5];
+const SWEEP_TO = [1.2, -0.75, 0.5];
+
 /**
  * The continuous background motion on Home.
  *
@@ -28,6 +47,7 @@ const AMBIENT_LAYER = 1;
 function HomeAmbient({ quality }) {
   const groupRef = useRef();
   const lightRef = useRef();
+  const sweepRef = useRef();
   const meshRefs = useRef([]);
   const materialRefs = useRef([]);
 
@@ -44,6 +64,7 @@ function HomeAmbient({ quality }) {
   useEffect(() => {
     meshRefs.current.forEach((mesh) => mesh.layers.enable(AMBIENT_LAYER));
     if (lightRef.current) lightRef.current.layers.set(AMBIENT_LAYER);
+    if (sweepRef.current) sweepRef.current.layers.set(AMBIENT_LAYER);
   }, []);
 
   useFrame((state, delta) => {
@@ -67,6 +88,39 @@ function HomeAmbient({ quality }) {
       lightRef.current.position.y = Math.sin(t * 0.33) * 1.1;
     }
 
+    /*
+     * The reflection pass. Every SWEEP_PERIOD seconds a light crosses the
+     * lenses from the top-left corner to the bottom-right, echoing the sweep
+     * in the opening cinematic. Idle between passes rather than continuous,
+     * so it reads as a catch of light rather than a rotating beacon.
+     */
+    if (sweepRef.current) {
+      const phase = (t % SWEEP_PERIOD) / SWEEP_PERIOD;
+      const p = phase / SWEEP_FRACTION;
+
+      if (p <= 1) {
+        // Eased travel so it accelerates in and decelerates out.
+        const eased = p * p * (3 - 2 * p);
+        sweepRef.current.position.set(
+          SWEEP_FROM[0] + (SWEEP_TO[0] - SWEEP_FROM[0]) * eased,
+          SWEEP_FROM[1] + (SWEEP_TO[1] - SWEEP_FROM[1]) * eased,
+          SWEEP_FROM[2] + (SWEEP_TO[2] - SWEEP_FROM[2]) * eased
+        );
+        // Fades up and back down across the pass; never pops on or off.
+        sweepRef.current.intensity = Math.sin(Math.PI * p) * SWEEP_PEAK;
+      } else {
+        sweepRef.current.intensity = 0;
+      }
+
+      if (process.env.NODE_ENV !== 'production') {
+        window.__sweep = {
+          intensity: sweepRef.current.intensity,
+          x: sweepRef.current.position.x,
+          y: sweepRef.current.position.y,
+        };
+      }
+    }
+
     // Held back while the cinematic is still running, so it never competes
     // with the intro's own spectacles.
     const target = sceneState.introPlaying ? 0 : 1;
@@ -78,10 +132,10 @@ function HomeAmbient({ quality }) {
   const material = (
     <meshStandardMaterial
       ref={collectMaterial}
-      color="#4c4c5c"
-      roughness={0.2}
-      metalness={0.9}
-      envMapIntensity={3.2}
+      color="#6a6a7e"
+      roughness={0.34}
+      metalness={0.5}
+      envMapIntensity={4}
       transparent
       /*
        * Starts visible, not at zero. On the reduced-motion path the canvas
@@ -111,10 +165,20 @@ function HomeAmbient({ quality }) {
       <pointLight
         ref={lightRef}
         position={[1.5, 0.4, 2]}
-        intensity={quality === 'high' ? 22 : 14}
-        distance={9}
+        intensity={quality === 'high' ? 34 : 22}
+        distance={11}
         decay={1.4}
         color="#b9c2d4"
+      />
+
+      {/* The periodic reflection pass. Starts dark and is driven by useFrame. */}
+      <pointLight
+        ref={sweepRef}
+        position={SWEEP_FROM}
+        intensity={0}
+        distance={9}
+        decay={1}
+        color="#eef3ff"
       />
     </group>
   );

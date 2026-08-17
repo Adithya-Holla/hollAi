@@ -13,7 +13,11 @@
 export const sceneState = {
   scrollY: 0,
   progress: 0,
+  /** Normalised to -1..1, y flipped, for the 3D scene. */
   pointer: { x: 0, y: 0 },
+  /** Raw viewport pixels, for DOM followers. */
+  pointerPx: { x: 0, y: 0 },
+  pointerSeen: false,
   route: '/',
   introPlaying: false,
   introDone: false,
@@ -37,6 +41,9 @@ export function setScroll(scrollY, docHeight, viewportHeight) {
 export function setPointer(clientX, clientY, width, height) {
   sceneState.pointer.x = (clientX / width) * 2 - 1;
   sceneState.pointer.y = -((clientY / height) * 2 - 1);
+  sceneState.pointerPx.x = clientX;
+  sceneState.pointerPx.y = clientY;
+  sceneState.pointerSeen = true;
 }
 
 export function resetScene() {
@@ -44,6 +51,9 @@ export function resetScene() {
   sceneState.progress = 0;
   sceneState.pointer.x = 0;
   sceneState.pointer.y = 0;
+  sceneState.pointerPx.x = 0;
+  sceneState.pointerPx.y = 0;
+  sceneState.pointerSeen = false;
   sceneState.route = '/';
   sceneState.introPlaying = false;
   sceneState.introDone = false;

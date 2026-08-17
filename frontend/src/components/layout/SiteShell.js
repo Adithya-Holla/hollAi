@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import CursorHalo from '../CursorHalo';
 import { useScrollProgress } from '../../hooks/useScrollProgress';
 import { sceneState } from '../../state/scene';
 import { shouldPlayIntro, markIntroSeen } from '../../state/introGate';
@@ -99,6 +100,8 @@ function SiteShell() {
 
       <div className="grain" aria-hidden="true" />
       <div className="vignette" aria-hidden="true" />
+
+      <CursorHalo />
 
       {introPlaying && (
         <React.Suspense fallback={<div className="intro-layer" />}>
