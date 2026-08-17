@@ -33,6 +33,13 @@ const SWEEP_PEAK = 1.5;
 const SWEEP_START = -2.7;
 const SWEEP_END = 2.7;
 
+/*
+ * The single colour of the frame. A muted --bone: same warm neutral family as
+ * the type, dark enough to sit behind it. Nothing else in this object is
+ * allowed to introduce a second hue.
+ */
+const FRAME_COLOR = "#78766f";
+
 /**
  * The continuous background motion on Home.
  *
@@ -48,8 +55,8 @@ function HomeAmbient({ quality }) {
   const groupRef = useRef();
   const lightRef = useRef();
 
-  const geometryL = useMemo(() => frameGeometry(-CX, 0.034, 140), []);
-  const geometryR = useMemo(() => frameGeometry(CX, 0.034, 140), []);
+  const geometryL = useMemo(() => frameGeometry(-CX, 0.02), []);
+  const geometryR = useMemo(() => frameGeometry(CX, 0.02), []);
   const lensL = useMemo(() => lensGeometry(-CX), []);
   const lensR = useMemo(() => lensGeometry(CX), []);
   // Populated by the LensSweep children with their actual materials.
@@ -124,26 +131,19 @@ function HomeAmbient({ quality }) {
   });
 
   /*
-   * Deliberately NOT transparent. A transparent material joins the
+   * Unlit, and one flat colour.
+   *
+   * A shaded metal frame took its hue from three places at once — the base
+   * colour, the emissive, and whatever the environment map reflected — which
+   * pulled it blue and off-palette. An unlit material renders exactly the
+   * colour set here and nothing else, whatever the lighting does, which also
+   * makes the silhouette read consistently as the object turns.
+   *
+   * Deliberately NOT transparent: a transparent material joins the
    * transparent render pass, which draws after all opaque geometry — enough
    * to hide the additive sweep quad completely.
    */
-  const material = (
-    <meshStandardMaterial
-      color="#9aa0b4"
-      roughness={0.38}
-      metalness={0.3}
-      envMapIntensity={3}
-      /*
-       * A low emissive floor so the frame never drops to pure black as the
-       * object turns away from its light. This is what keeps the silhouette
-       * continuously readable; without it the outline breaks up whenever the
-       * key light falls off an edge.
-       */
-      emissive="#414a63"
-      emissiveIntensity={0.7}
-    />
-  );
+  const material = <meshBasicMaterial color={FRAME_COLOR} />;
 
   return (
     /*
@@ -156,9 +156,9 @@ function HomeAmbient({ quality }) {
        * and a light passing them can produce a glint but never a sweep —
        * there is simply no surface for a reflection to travel across.
        */}
-      <mesh geometry={lensL} position={[0, 0, -0.03]} rotation={[0, 0.13, 0]}>
+      <mesh geometry={lensL} position={[0, 0, -0.08]} rotation={[0, 0.13, 0]}>
         <meshPhysicalMaterial
-          color="#0b0b12"
+          color="#0b0b0b"
           roughness={0.14}
           metalness={0.3}
           clearcoat={1}
@@ -166,9 +166,9 @@ function HomeAmbient({ quality }) {
           envMapIntensity={1.5}
         />
       </mesh>
-      <mesh geometry={lensR} position={[0, 0, -0.03]} rotation={[0, -0.13, 0]}>
+      <mesh geometry={lensR} position={[0, 0, -0.08]} rotation={[0, -0.13, 0]}>
         <meshPhysicalMaterial
-          color="#0b0b12"
+          color="#0b0b0b"
           roughness={0.14}
           metalness={0.3}
           clearcoat={1}
@@ -177,12 +177,17 @@ function HomeAmbient({ quality }) {
         />
       </mesh>
 
-      <mesh geometry={geometryL}>{material}</mesh>
-      <mesh geometry={geometryR}>{material}</mesh>
+      {/*
+        * Held clearly proud of the lens. The lens is extruded and tilted, so
+        * at some rotations its front face crosses the frame's plane and clips
+        * the outline — visible as one side of the pair going missing.
+        */}
+      <mesh geometry={geometryL} position={[0, 0, 0.06]}>{material}</mesh>
+      <mesh geometry={geometryR} position={[0, 0, 0.06]}>{material}</mesh>
 
       {/* Bridge, so the two lenses read as one object. */}
-      <mesh position={[0, 0.05, 0]}>
-        <boxGeometry args={[0.18, 0.03, 0.03]} />
+      <mesh position={[0, 0.05, 0.06]}>
+        <boxGeometry args={[0.18, 0.022, 0.022]} />
         {material}
       </mesh>
 
@@ -197,7 +202,7 @@ function HomeAmbient({ quality }) {
         intensity={quality === 'high' ? 13 : 9}
         distance={3.4}
         decay={1.5}
-        color="#b9c2d4"
+        color="#cbc8c2"
       />
 
       {/* The travelling reflection, drawn on the lens faces. */}

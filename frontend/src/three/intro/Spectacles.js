@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import * as THREE from 'three';
 import { Environment } from '@react-three/drei';
-import { lensShape, frameGeometry, LENS_W, GAP, CX } from '../lensShape';
+import { lensShape, frameTubeGeometry, LENS_W, GAP, CX } from '../lensShape';
 
 /**
  * The frame as swept tube geometry rather than a flat outline, so the sweep
  * light in the intro timeline produces a real moving specular along it.
  */
 function Frame({ cx }) {
-  const geometry = useMemo(() => frameGeometry(cx), [cx]);
+  const geometry = useMemo(() => frameTubeGeometry(cx), [cx]);
 
   return (
     <mesh geometry={geometry}>

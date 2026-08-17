@@ -56,7 +56,7 @@ export function createSweepUniforms(cx) {
     uCx: { value: cx },
     uHalfW: { value: LENS_W / 2 },
     uHalfH: { value: LENS_H / 2 },
-    uColor: { value: new THREE.Color('#e6ecff') },
+    uColor: { value: new THREE.Color('#f2efe9') },
   };
 }
 
@@ -113,7 +113,7 @@ function LensSweep({ cx, materialRef, tilt = 0 }) {
     <mesh
       geometry={geometry}
       material={material}
-      position={[0, 0, 0.05]}
+      position={[0, 0, -0.02]}
       rotation={[0, tilt, 0]}
       renderOrder={20}
     />

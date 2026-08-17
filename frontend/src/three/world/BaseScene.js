@@ -42,7 +42,7 @@ function ShaftPlane({ position, rotation, size, opacity }) {
         blending={THREE.AdditiveBlending}
         uniforms={{
           uOpacity: { value: opacity },
-          uColor: { value: new THREE.Color('#7d8496') },
+          uColor: { value: new THREE.Color('#7e7b75') },
         }}
       />
     </mesh>
@@ -77,11 +77,11 @@ function WorldEnvironment() {
     <Environment resolution={64} frames={1}>
       <mesh scale={80}>
         <sphereGeometry args={[1, 20, 20]} />
-        <meshBasicMaterial color="#050509" side={THREE.BackSide} />
+        <meshBasicMaterial color="#070707" side={THREE.BackSide} />
       </mesh>
       <mesh position={[-14, 8, -10]} rotation={[0, 0.5, 0.3]}>
         <planeGeometry args={[6, 30]} />
-        <meshBasicMaterial color="#5c6474" />
+        <meshBasicMaterial color="#6d6b66" />
       </mesh>
     </Environment>
   );
@@ -119,7 +119,7 @@ function BaseScene({ quality, route }) {
       <ambientLight intensity={0.05} />
 
       {/* Key: low and hard from screen-left. This is what carves the space. */}
-      <directionalLight ref={keyRef} position={[-6, 3, 2]} intensity={1.35} color="#cfd2d8" />
+      <directionalLight ref={keyRef} position={[-6, 3, 2]} intensity={1.35} color="#d4d1cb" />
 
       {/*
        * Red rim, from behind and far off to the side.
@@ -135,7 +135,7 @@ function BaseScene({ quality, route }) {
          * Rough enough to scatter rather than mirror. Metalness this high with
          * low roughness produces a single hot reflection that reads as a blob.
          */}
-        <meshStandardMaterial color="#0A0A0C" roughness={0.62} metalness={0.55} />
+        <meshStandardMaterial color="#0A0A0A" roughness={0.62} metalness={0.55} />
       </mesh>
 
       <WorldEnvironment />
