@@ -1,37 +1,37 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { frameGeometry, CX } from '../lensShape';
+import { frameGeometry, lensGeometry, CX } from '../lensShape';
+import LensSweep from './LensSweep';
 import { sceneState } from '../../state/scene';
 
-/**
- * Layer reserved for the ambient object and its light.
+
+/*
+ * NOTE — do not put these lights on their own layer.
  *
- * A light bright enough to define the frames also dumps a large bright pool
- * on the floor, which reads as a spotlight blob. three.js only lets a light
- * affect objects whose layers it shares, so putting both on their own layer
- * lights the glasses and nothing else. The meshes keep layer 0 as well, so
- * the camera still draws them.
+ * three.js collects a light only when `light.layers.test(camera.layers)`
+ * passes, and there is no per-object light masking in the forward renderer.
+ * Moving a light to layer 1 while the camera renders layer 0 therefore does
+ * not restrict it to matching objects — it removes the light from the scene
+ * entirely. An earlier version did exactly that, which is why no intensity
+ * value here had any visible effect.
+ *
+ * Floor spill is controlled physically instead: modest intensities and a
+ * `distance` short enough that the falloff dies before it reaches the floor.
  */
-const AMBIENT_LAYER = 1;
 
 /* Reflection pass: seconds between passes, and the share of that spent
    travelling. The rest is idle, so it reads as a catch of light. */
 const SWEEP_PERIOD = 7;
 const SWEEP_FRACTION = 0.22;
-const SWEEP_PEAK = 78;
+const SWEEP_PEAK = 1.5;
 
 /*
- * Local-space start and end: top-left to bottom-right, just in front of the
- * lenses so the highlight rakes across their face.
- *
- * Kept small on purpose. These are local units inside a group scaled ~3x, so
- * they are tripled in world space — while a light's `distance` falloff is
- * measured in world units and is NOT scaled with its parent. Generous local
- * offsets put the light outside its own falloff radius, where it contributes
- * exactly nothing.
+ * Band position along the lens diagonal. -2 is the top-left corner and +2 the
+ * bottom-right, so the extra margin either side starts and finishes the pass
+ * fully off the glass.
  */
-const SWEEP_FROM = [-1.2, 0.75, 0.5];
-const SWEEP_TO = [1.2, -0.75, 0.5];
+const SWEEP_START = -2.7;
+const SWEEP_END = 2.7;
 
 /**
  * The continuous background motion on Home.
@@ -47,25 +47,14 @@ const SWEEP_TO = [1.2, -0.75, 0.5];
 function HomeAmbient({ quality }) {
   const groupRef = useRef();
   const lightRef = useRef();
-  const sweepRef = useRef();
-  const meshRefs = useRef([]);
-  const materialRefs = useRef([]);
 
   const geometryL = useMemo(() => frameGeometry(-CX, 0.02, 120), []);
   const geometryR = useMemo(() => frameGeometry(CX, 0.02, 120), []);
+  const lensL = useMemo(() => lensGeometry(-CX), []);
+  const lensR = useMemo(() => lensGeometry(CX), []);
+  // Populated by the LensSweep children with their actual materials.
+  const sweepMaterials = useRef([]);
 
-  const collectMesh = (m) => {
-    if (m && !meshRefs.current.includes(m)) meshRefs.current.push(m);
-  };
-  const collectMaterial = (m) => {
-    if (m && !materialRefs.current.includes(m)) materialRefs.current.push(m);
-  };
-
-  useEffect(() => {
-    meshRefs.current.forEach((mesh) => mesh.layers.enable(AMBIENT_LAYER));
-    if (lightRef.current) lightRef.current.layers.set(AMBIENT_LAYER);
-    if (sweepRef.current) sweepRef.current.layers.set(AMBIENT_LAYER);
-  }, []);
 
   useFrame((state, delta) => {
     const group = groupRef.current;
@@ -82,10 +71,12 @@ function HomeAmbient({ quality }) {
     group.position.x = Math.sin(t * 0.056) * 1.1;
 
     // The light circles the object, so highlights crawl along the frame edge.
+    // It stays ABOVE the glasses: the group sits 2.5 world units over the
+    // floor, and the light's radius is set to die before it gets there.
     if (lightRef.current) {
-      lightRef.current.position.x = Math.sin(t * 0.24) * 2.6;
-      lightRef.current.position.z = Math.cos(t * 0.24) * 2.2 + 1.4;
-      lightRef.current.position.y = Math.sin(t * 0.33) * 1.1;
+      lightRef.current.position.x = Math.sin(t * 0.24) * 0.7;
+      lightRef.current.position.z = Math.cos(t * 0.24) * 0.3 + 0.55;
+      lightRef.current.position.y = 0.5 + Math.sin(t * 0.33) * 0.12;
     }
 
     /*
@@ -94,56 +85,53 @@ function HomeAmbient({ quality }) {
      * in the opening cinematic. Idle between passes rather than continuous,
      * so it reads as a catch of light rather than a rotating beacon.
      */
-    if (sweepRef.current) {
+    {
       const phase = (t % SWEEP_PERIOD) / SWEEP_PERIOD;
       const p = phase / SWEEP_FRACTION;
+
+      let head = SWEEP_END;
+      let strength = 0;
 
       if (p <= 1) {
         // Eased travel so it accelerates in and decelerates out.
         const eased = p * p * (3 - 2 * p);
-        sweepRef.current.position.set(
-          SWEEP_FROM[0] + (SWEEP_TO[0] - SWEEP_FROM[0]) * eased,
-          SWEEP_FROM[1] + (SWEEP_TO[1] - SWEEP_FROM[1]) * eased,
-          SWEEP_FROM[2] + (SWEEP_TO[2] - SWEEP_FROM[2]) * eased
-        );
+        head = SWEEP_START + (SWEEP_END - SWEEP_START) * eased;
         // Fades up and back down across the pass; never pops on or off.
-        sweepRef.current.intensity = Math.sin(Math.PI * p) * SWEEP_PEAK;
-      } else {
-        sweepRef.current.intensity = 0;
+        strength = Math.sin(Math.PI * p) * SWEEP_PEAK;
       }
 
+      sweepMaterials.current.forEach((m) => {
+        m.uniforms.uHead.value = head;
+        m.uniforms.uStrength.value = strength;
+      });
+
       if (process.env.NODE_ENV !== 'production') {
-        window.__sweep = {
-          intensity: sweepRef.current.intensity,
-          x: sweepRef.current.position.x,
-          y: sweepRef.current.position.y,
-        };
+        window.__sweep = { intensity: strength, head };
       }
     }
 
-    // Held back while the cinematic is still running, so it never competes
-    // with the intro's own spectacles.
-    const target = sceneState.introPlaying ? 0 : 1;
-    materialRefs.current.forEach((m) => {
-      m.opacity += (target - m.opacity) * Math.min(delta * 1.2, 1);
-    });
+    /*
+     * Hidden outright while the cinematic runs, rather than faded through
+     * material opacity. Marking these materials `transparent` moved them into
+     * the transparent render pass, which draws after opaque geometry and
+     * painted straight over the sweep quad — the reason no reflection was
+     * visible at all. The opaque cover hides the world during the intro
+     * anyway, so a hard toggle loses nothing.
+     */
+    group.visible = !sceneState.introPlaying;
   });
 
+  /*
+   * Deliberately NOT transparent. A transparent material joins the
+   * transparent render pass, which draws after all opaque geometry — enough
+   * to hide the additive sweep quad completely.
+   */
   const material = (
     <meshStandardMaterial
-      ref={collectMaterial}
       color="#6a6a7e"
       roughness={0.34}
       metalness={0.5}
       envMapIntensity={4}
-      transparent
-      /*
-       * Starts visible, not at zero. On the reduced-motion path the canvas
-       * runs frameloop="demand", so the fade below never ticks — seeded at 0
-       * the object would simply never appear. Fading out while the cinematic
-       * plays is safe because the opaque cover hides the world anyway.
-       */
-      opacity={1}
     />
   );
 
@@ -153,33 +141,58 @@ function HomeAmbient({ quality }) {
      * the exponential fog does not erase it. At -15 it was invisible.
      */
     <group ref={groupRef} position={[0, 2.5, -6.2]} scale={quality === 'high' ? 3 : 2.5}>
-      <mesh geometry={geometryL} ref={collectMesh}>{material}</mesh>
-      <mesh geometry={geometryR} ref={collectMesh}>{material}</mesh>
+      {/*
+       * The lens surfaces. Without these the object is only wire-thin frames,
+       * and a light passing them can produce a glint but never a sweep —
+       * there is simply no surface for a reflection to travel across.
+       */}
+      <mesh geometry={lensL} position={[0, 0, -0.03]} rotation={[0, 0.13, 0]}>
+        <meshPhysicalMaterial
+          color="#0b0b12"
+          roughness={0.14}
+          metalness={0.3}
+          clearcoat={1}
+          clearcoatRoughness={0.1}
+          envMapIntensity={1.5}
+        />
+      </mesh>
+      <mesh geometry={lensR} position={[0, 0, -0.03]} rotation={[0, -0.13, 0]}>
+        <meshPhysicalMaterial
+          color="#0b0b12"
+          roughness={0.14}
+          metalness={0.3}
+          clearcoat={1}
+          clearcoatRoughness={0.1}
+          envMapIntensity={1.5}
+        />
+      </mesh>
+
+      <mesh geometry={geometryL}>{material}</mesh>
+      <mesh geometry={geometryR}>{material}</mesh>
 
       {/* Bridge, so the two lenses read as one object. */}
-      <mesh position={[0, 0.05, 0]} ref={collectMesh}>
+      <mesh position={[0, 0.05, 0]}>
         <boxGeometry args={[0.18, 0.018, 0.018]} />
         {material}
       </mesh>
 
+      {/*
+       * Keeps the frames alive between passes. `distance` is deliberately
+       * short: the floor sits ~2.5 world units below this group, and anything
+       * that reaches it turns into a bright pool.
+       */}
       <pointLight
         ref={lightRef}
-        position={[1.5, 0.4, 2]}
-        intensity={quality === 'high' ? 34 : 22}
-        distance={11}
-        decay={1.4}
+        position={[0.5, 0.5, 0.55]}
+        intensity={quality === 'high' ? 13 : 9}
+        distance={3.4}
+        decay={1.5}
         color="#b9c2d4"
       />
 
-      {/* The periodic reflection pass. Starts dark and is driven by useFrame. */}
-      <pointLight
-        ref={sweepRef}
-        position={SWEEP_FROM}
-        intensity={0}
-        distance={9}
-        decay={1}
-        color="#eef3ff"
-      />
+      {/* The travelling reflection, drawn on the lens faces. */}
+      <LensSweep cx={-CX} materialRef={sweepMaterials} tilt={0.13} />
+      <LensSweep cx={CX} materialRef={sweepMaterials} tilt={-0.13} />
     </group>
   );
 }

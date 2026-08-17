@@ -25,6 +25,27 @@ export function lensShape(cx) {
   return shape;
 }
 
+/**
+ * Lens geometry: the outline extruded with a large bevel.
+ *
+ * The bevel is the point. A flat lens mirrors a light's shape exactly and
+ * reads as a block pasted on; the curvature is what a highlight stretches
+ * and bends around, which is what makes a sweep read as a reflection.
+ */
+export function lensGeometry(cx, { depth = 0.012, bevel = 0.035 } = {}) {
+  const geo = new THREE.ExtrudeGeometry(lensShape(cx), {
+    depth,
+    bevelEnabled: true,
+    bevelThickness: bevel * 0.86,
+    bevelSize: bevel,
+    bevelOffset: 0,
+    bevelSegments: 10,
+    curveSegments: 24,
+  });
+  geo.computeVertexNormals();
+  return geo;
+}
+
 /** Frame geometry: the lens outline swept into a tube. */
 export function frameGeometry(cx, radius = 0.016, tubularSegments = 200) {
   const pts = lensShape(cx)
