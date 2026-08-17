@@ -1,6 +1,6 @@
 import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { frameGeometry, lensGeometry, CX } from '../lensShape';
+import { frameTubeGeometry, lensGeometry, CX } from '../lensShape';
 import LensSweep from './LensSweep';
 import { sceneState } from '../../state/scene';
 
@@ -34,11 +34,12 @@ const SWEEP_START = -2.7;
 const SWEEP_END = 2.7;
 
 /*
- * The single colour of the frame. A muted --bone: same warm neutral family as
- * the type, dark enough to sit behind it. Nothing else in this object is
- * allowed to introduce a second hue.
+ * The frame is near-black. It is not meant to read as a drawn outline — it
+ * is a dark object the environment catches along its curved edges, so what
+ * you actually see is a thin highlight tracing the rim. Neutral, so those
+ * highlights stay white instead of picking up a tint.
  */
-const FRAME_COLOR = "#78766f";
+const FRAME_COLOR = '#232322';
 
 /**
  * The continuous background motion on Home.
@@ -55,8 +56,8 @@ function HomeAmbient({ quality }) {
   const groupRef = useRef();
   const lightRef = useRef();
 
-  const geometryL = useMemo(() => frameGeometry(-CX, 0.02), []);
-  const geometryR = useMemo(() => frameGeometry(CX, 0.02), []);
+  const geometryL = useMemo(() => frameTubeGeometry(-CX, 0.022, 200), []);
+  const geometryR = useMemo(() => frameTubeGeometry(CX, 0.022, 200), []);
   const lensL = useMemo(() => lensGeometry(-CX), []);
   const lensR = useMemo(() => lensGeometry(CX), []);
   // Populated by the LensSweep children with their actual materials.
@@ -131,19 +132,26 @@ function HomeAmbient({ quality }) {
   });
 
   /*
-   * Unlit, and one flat colour.
+   * Dark, glossy, and lit almost entirely by the environment — the round
+   * section of the tube is what turns that into a thin highlight tracing the
+   * rim as the object turns.
    *
-   * A shaded metal frame took its hue from three places at once — the base
-   * colour, the emissive, and whatever the environment map reflected — which
-   * pulled it blue and off-palette. An unlit material renders exactly the
-   * colour set here and nothing else, whatever the lighting does, which also
-   * makes the silhouette read consistently as the object turns.
+   * No emissive and a neutral base: the earlier version took its hue from a
+   * base colour, an emissive AND the environment at once, which is what
+   * pulled it blue.
    *
    * Deliberately NOT transparent: a transparent material joins the
    * transparent render pass, which draws after all opaque geometry — enough
    * to hide the additive sweep quad completely.
    */
-  const material = <meshBasicMaterial color={FRAME_COLOR} />;
+  const material = (
+    <meshStandardMaterial
+      color={FRAME_COLOR}
+      roughness={0.2}
+      metalness={0.95}
+      envMapIntensity={3.4}
+    />
+  );
 
   return (
     /*
@@ -187,7 +195,7 @@ function HomeAmbient({ quality }) {
 
       {/* Bridge, so the two lenses read as one object. */}
       <mesh position={[0, 0.05, 0.06]}>
-        <boxGeometry args={[0.18, 0.022, 0.022]} />
+        <boxGeometry args={[0.18, 0.02, 0.02]} />
         {material}
       </mesh>
 
