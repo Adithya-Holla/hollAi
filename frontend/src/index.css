@@ -2,6 +2,7 @@
 @import './styles/tokens.css';
 @import './styles/typography.css';
 @import './styles/overlays.css';
+@import './styles/primitives.css';
 
 /* Tailwind is still here only because Footer.js uses a few utility classes.
    Both are removed in Task 13. */

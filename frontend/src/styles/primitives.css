@@ -1,0 +1,82 @@
+/*
+ * Cross-page primitives. Anything used by more than one page lives here
+ * rather than in whichever page stylesheet happened to define it first.
+ */
+
+/* ── Page and section heads ───────────────────────────────────────────── */
+
+.page-head {
+  margin-bottom: 5rem;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 84%;
+  font-size: var(--step-6);
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+  text-transform: uppercase;
+  color: var(--bone);
+  margin: 0.9rem 0 0;
+}
+
+.page-subtitle {
+  margin: 1.5rem 0 0;
+}
+
+.section-head {
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 88%;
+  font-size: var(--step-5);
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--bone);
+  margin: 0.75rem 0 0;
+}
+
+/* ── Links ────────────────────────────────────────────────────────────── */
+
+.inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--bone);
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--graphite);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.inline-link:hover,
+.inline-link:focus-visible {
+  color: var(--signal);
+  border-color: var(--signal);
+}
+
+.inline-link--lg {
+  font-size: var(--step-0);
+  padding-bottom: 6px;
+}
+
+/* ── Loading / error / empty states ───────────────────────────────────── */
+
+.state-block {
+  padding: 4rem 0;
+  border-top: var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.state-block--error {
+  color: var(--signal);
+}
