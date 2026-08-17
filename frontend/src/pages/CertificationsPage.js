@@ -1,7 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { FaGraduationCap, FaCertificate, FaExternalLinkAlt, FaCalendarAlt } from 'react-icons/fa';
+import React, { useState, useEffect, useMemo } from 'react';
+import { FaGraduationCap } from 'react-icons/fa';
 import '../styles/CertificationsPage.css';
 import { buildApiUrl } from '../config/api';
+import { useInView } from '../hooks/useInView';
+
+function Record({ cert, index, formatDate }) {
+  const [ref, inView] = useInView({ threshold: 0.2 });
+
+  return (
+    <li
+      ref={ref}
+      className={`record ${cert.featured ? 'record--featured' : ''} ${inView ? 'is-in' : ''}`}
+    >
+      <span className="record-index t-mono">{String(index + 1).padStart(2, '0')}</span>
+
+      <div className="record-body">
+        <h2 className="record-title">{cert.title}</h2>
+        <p className="t-mono record-org">{cert.organization}</p>
+        {cert.description && <p className="t-body record-desc">{cert.description}</p>}
+
+        {cert.skills && cert.skills.length > 0 && (
+          <ul className="record-skills">
+            {cert.skills.map((skill) => (
+              <li key={skill} className="t-mono">{skill}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="record-meta">
+        <time className="t-mono record-date" dateTime={cert.issueDate}>
+          {formatDate(cert.issueDate)}
+        </time>
+        {cert.credentialURL && (
+          <a
+            href={cert.credentialURL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="t-mono inline-link"
+          >
+            View Credential
+          </a>
+        )}
+      </div>
+    </li>
+  );
+}
 
 function CertificationsPage() {
   const [isVisible, setIsVisible] = useState(false);
@@ -15,16 +59,12 @@ function CertificationsPage() {
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
   useEffect(() => {
-    // Add initial fade-in animation
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-    
+    const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);
 
@@ -34,11 +74,11 @@ function CertificationsPage() {
       try {
         setLoading(true);
         const response = await fetch(buildApiUrl('/certifications'));
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch certifications');
         }
-        
+
         const data = await response.json();
         setCertifications(data);
         setLoading(false);
@@ -52,138 +92,47 @@ function CertificationsPage() {
     fetchCertifications();
   }, []);
 
-  // Filter featured certifications
-  const featuredCertifications = certifications.filter(cert => cert.featured);
-  
-  // Filter non-featured certifications
-  const otherCertifications = certifications.filter(cert => !cert.featured);
+  // `featured` drives emphasis and ordering; the records run as one
+  // continuously numbered list rather than two separate sections.
+  const ordered = useMemo(
+    () => [
+      ...certifications.filter((cert) => cert.featured),
+      ...certifications.filter((cert) => !cert.featured),
+    ],
+    [certifications]
+  );
 
   return (
     <div className="certifications-page">
       <div className={`certifications-container ${isVisible ? 'fade-in' : ''}`}>
-        <h1 className="certifications-title">My <span className="highlight">Certifications</span></h1>
-        <p className="certifications-subtitle">Credentials validating my expertise in AI and machine learning</p>
-        
+        <header className="page-head">
+          <span className="t-mono">Credentials on record</span>
+          <h1 className="page-title">Certifications</h1>
+          <p className="t-body page-subtitle">
+            Credentials validating my expertise in AI and machine learning
+          </p>
+        </header>
+
         {loading ? (
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Loading certifications...</p>
-          </div>
+          <div className="state-block t-mono">Loading certifications…</div>
         ) : error ? (
-          <div className="error-container">
-            <p>Error loading certifications: {error}</p>
+          <div className="state-block state-block--error t-mono">
+            Error loading certifications: {error}
           </div>
         ) : certifications.length === 0 ? (
-          <div className="no-certifications">
-            <FaGraduationCap className="no-certifications-icon" />
-            <p>No certifications available at the moment.</p>
+          <div className="state-block t-mono">
+            <FaGraduationCap aria-hidden="true" /> No certifications available at the moment.
           </div>
         ) : (
-          <>
-            {/* Featured Certifications */}
-            {featuredCertifications.length > 0 && (
-              <section className="featured-certifications">
-                <h2 className="section-title">Featured Certifications</h2>
-                <div className="featured-grid">
-                  {featuredCertifications.map((cert, index) => (
-                    <div 
-                      className="featured-card" 
-                      key={cert._id}
-                      style={{ animationDelay: `${index * 0.1}s` }}
-                    >
-                      {cert.imageUrl ? (
-                        <div className="cert-image-container">
-                          <img src={cert.imageUrl} alt={cert.title} className="cert-image"  loading="lazy"/>
-                        </div>
-                      ) : (
-                        <div className="cert-icon-container">
-                          <FaCertificate className="cert-icon" />
-                        </div>
-                      )}
-                      <div className="cert-content">
-                        <h3 className="cert-title">{cert.title}</h3>
-                        <p className="cert-issuer">
-                          <strong>{cert.organization}</strong> • Issued {formatDate(cert.issueDate)}
-                        </p>
-                        <p className="cert-description">{cert.description}</p>
-                        
-                        {cert.skills && cert.skills.length > 0 && (
-                          <div className="cert-skills">
-                            {cert.skills.map((skill, idx) => (
-                              <span key={idx} className="skill-tag">{skill}</span>
-                            ))}
-                          </div>
-                        )}
-                        
-                        {cert.credentialURL && (
-                          <a 
-                            href={cert.credentialURL} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="cert-link"
-                          >
-                            View Credential <FaExternalLinkAlt />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* All Certifications */}
-            {otherCertifications.length > 0 && (
-              <section className="all-certifications">
-                <h2 className="section-title">All Certifications</h2>
-                <div className="cert-timeline">
-                  {otherCertifications.map((cert, index) => (
-                    <div 
-                      className="timeline-card" 
-                      key={cert._id}
-                      style={{ animationDelay: `${(featuredCertifications.length + index) * 0.1}s` }}
-                    >
-                      <div className="timeline-marker">
-                        <FaCalendarAlt />
-                      </div>
-                      <div className="timeline-content">
-                        <h3 className="timeline-title">{cert.title}</h3>
-                        <p className="timeline-issuer">
-                          <strong>{cert.organization}</strong> • Issued {formatDate(cert.issueDate)}
-                        </p>
-                        
-                        {cert.skills && cert.skills.length > 0 && (
-                          <div className="timeline-skills">
-                            {cert.skills.slice(0, 3).map((skill, idx) => (
-                              <span key={idx} className="skill-mini-tag">{skill}</span>
-                            ))}
-                            {cert.skills.length > 3 && (
-                              <span className="skill-more">+{cert.skills.length - 3}</span>
-                            )}
-                          </div>
-                        )}
-                        
-                        {cert.credentialURL && (
-                          <a 
-                            href={cert.credentialURL} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="timeline-link"
-                          >
-                            View
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-          </>
+          <ol className="records">
+            {ordered.map((cert, index) => (
+              <Record key={cert._id} cert={cert} index={index} formatDate={formatDate} />
+            ))}
+          </ol>
         )}
       </div>
     </div>
   );
 }
 
-export default CertificationsPage; 
+export default CertificationsPage;

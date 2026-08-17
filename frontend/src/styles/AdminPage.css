@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #0f0f0f;
+  background: var(--void);
 }
 
 .admin-login-form {
@@ -11,7 +11,7 @@
   flex-direction: column;
   gap: 1rem;
   padding: 2rem;
-  background: #1a1a1a;
+  background: var(--charcoal);
   border-radius: 8px;
   width: 320px;
 }
@@ -20,36 +20,36 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  color: #eaeaea;
+  color: var(--bone);
   font-size: 0.9rem;
 }
 
 .admin-login-form input {
   padding: 0.5rem;
   border-radius: 4px;
-  border: 1px solid #333;
-  background: #111;
-  color: #fff;
+  border: 1px solid var(--graphite);
+  background: var(--ink);
+  color: var(--bone);
 }
 
 .admin-login-form button {
   padding: 0.6rem;
   border-radius: 4px;
   border: none;
-  background: #4f9dff;
-  color: #fff;
+  background: var(--signal);
+  color: var(--bone);
   cursor: pointer;
 }
 
 .admin-error {
-  color: #ff6b6b;
+  color: var(--signal);
   font-size: 0.85rem;
 }
 
 .admin-page {
   min-height: 100vh;
-  background: #0f0f0f;
-  color: #eaeaea;
+  background: var(--void);
+  color: var(--bone);
   padding: 2rem;
 }
 
@@ -61,16 +61,16 @@
 
 .admin-tabs button {
   padding: 0.5rem 1rem;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  color: #eaeaea;
+  background: var(--charcoal);
+  border: 1px solid var(--graphite);
+  color: var(--bone);
   cursor: pointer;
   border-radius: 4px;
 }
 
 .admin-tabs button.active {
-  background: #4f9dff;
-  color: #fff;
+  background: var(--signal);
+  color: var(--bone);
 }
 
 .admin-table {
@@ -80,7 +80,7 @@
 }
 
 .admin-table th, .admin-table td {
-  border: 1px solid #333;
+  border: 1px solid var(--graphite);
   padding: 0.5rem;
   text-align: left;
   font-size: 0.9rem;
@@ -96,7 +96,7 @@
 .admin-form input, .admin-form textarea {
   padding: 0.5rem;
   border-radius: 4px;
-  border: 1px solid #333;
-  background: #111;
-  color: #fff;
+  border: 1px solid var(--graphite);
+  background: var(--ink);
+  color: var(--bone);
 }

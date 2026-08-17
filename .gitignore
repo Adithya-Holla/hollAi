@@ -45,4 +45,5 @@ coverage/
 "h origin main * Write-Output*"
 "hell -File git-push.ps1"
 "frontend/h origin master:main"
-ersHOLLADocumentshollai 
+ersHOLLADocumentshollai shots/
+.playwright-mcp/

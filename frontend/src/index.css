@@ -4,11 +4,6 @@
 @import './styles/overlays.css';
 @import './styles/primitives.css';
 
-/* Tailwind is still here only because Footer.js uses a few utility classes.
-   Both are removed in Task 13. */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 /* Add global box-sizing to ensure consistent sizing */
 *, *::before, *::after {

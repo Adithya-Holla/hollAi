@@ -91,9 +91,12 @@ function ContactPage() {
   return (
     <div className="contact-page">
       <div className="contact-container">
-        <h1 className="contact-title">Get in <span className="highlight">Touch</span></h1>
-        <p className="contact-subtitle">Have a question or want to work together? Let's connect!</p>
-        
+        <header className="page-head">
+          <span className="t-mono">Final transmission</span>
+          <h1 className="page-title">Get in <span className="contact-mark">Touch</span></h1>
+          <p className="t-body page-subtitle">Have a question or want to work together? Let's connect!</p>
+        </header>
+
         <div className="contact-content">
           <div className="contact-info-left">
             <div className="info-card" onClick={() => copyToClipboard('adithyavholla23@gmail.com', 'email')}>
@@ -101,7 +104,7 @@ function ContactPage() {
                 <FaEnvelope />
               </div>
               <div className="info-content">
-                <h3>Email</h3>
+                <h3 className="t-mono">Email</h3>
                 <p className="copyable">
                   <a href="mailto:adithyavholla23@gmail.com">adithyavholla23@gmail.com</a>
                   <span className={`copy-icon ${copiedStates.email ? 'copied' : ''}`}>
@@ -110,13 +113,13 @@ function ContactPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="info-card" onClick={() => copyToClipboard('+91 9404110669', 'phone')}>
               <div className="info-icon">
                 <FaPhoneAlt />
               </div>
               <div className="info-content">
-                <h3>Phone</h3>
+                <h3 className="t-mono">Phone</h3>
                 <p className="copyable">
                   <a href="tel:+919404110669">+91 9404110669</a>
                   <span className={`copy-icon ${copiedStates.phone ? 'copied' : ''}`}>
@@ -131,13 +134,13 @@ function ContactPage() {
                 <FaMapMarkerAlt />
               </div>
               <div className="info-content">
-                <h3>Location</h3>
+                <h3 className="t-mono">Location</h3>
                 <p>Bengaluru, Karnataka, India</p>
               </div>
             </div>
 
             <div className="social-media">
-              <h3>Connect with Me</h3>
+              <h3 className="t-mono">Connect with Me</h3>
               <div className="social-icons">
                 <a href="https://github.com/Adithya-Holla" target="_blank" rel="noopener noreferrer" className="social-icon">
                   <FaGithub />
@@ -151,7 +154,7 @@ function ContactPage() {
 
           <div className="contact-info-right">
             <div className="feedback-form-container">
-              <h3>Send Me a Message</h3>
+              <h3 className="t-mono">Send Me a Message</h3>
               <form onSubmit={handleSubmit} className="feedback-form">
                 <div className="form-group">
                   <input
