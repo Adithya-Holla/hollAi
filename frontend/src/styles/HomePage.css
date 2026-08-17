@@ -234,6 +234,10 @@
 .preview-visual img {
   width: 100%;
   display: block;
+  /* Reserve the box before the lazy image loads — see ProjectsPage.css. */
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: var(--ink);
   filter: grayscale(1) contrast(1.08);
   transition: filter var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-out);
 }

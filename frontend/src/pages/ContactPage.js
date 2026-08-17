@@ -142,11 +142,23 @@ function ContactPage() {
             <div className="social-media">
               <h3 className="t-mono">Connect with Me</h3>
               <div className="social-icons">
-                <a href="https://github.com/Adithya-Holla" target="_blank" rel="noopener noreferrer" className="social-icon">
-                  <FaGithub />
+                <a
+                  href="https://github.com/Adithya-Holla"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon"
+                  aria-label="GitHub"
+                >
+                  <FaGithub aria-hidden="true" />
                 </a>
-                <a href="https://www.linkedin.com/in/adiholla/" target="_blank" rel="noopener noreferrer" className="social-icon">
-                  <FaLinkedin />
+                <a
+                  href="https://www.linkedin.com/in/adiholla/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon"
+                  aria-label="LinkedIn"
+                >
+                  <FaLinkedin aria-hidden="true" />
                 </a>
               </div>
             </div>
