@@ -1,0 +1,292 @@
+/*
+ * Projects as an operations map: pins joined by a red string that draws
+ * itself as the page is scrolled.
+ */
+
+.opmap {
+  position: relative;
+  /* Hairline survey grid. Very low contrast — it should register as texture,
+     not as a visible table. */
+  background-image:
+    linear-gradient(to right, rgba(232, 230, 225, 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(232, 230, 225, 0.028) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.opmap-string {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.opmap-track,
+.opmap-thread {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.opmap-track {
+  stroke: var(--graphite);
+  stroke-width: 1;
+}
+
+.opmap-thread {
+  stroke: var(--signal);
+  stroke-width: 1.5;
+}
+
+.opmap-rows {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Rows ─────────────────────────────────────────────────────────────── */
+
+/*
+ * Three columns: a card column on each side and a central gutter the string
+ * weaves down. The gutter is what keeps the route clear of the content.
+ */
+.opmap-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 26% minmax(0, 1fr);
+  padding: 5rem 0;
+  min-height: 18rem;
+}
+
+.opmap-row[data-side='left'] .opmap-card {
+  grid-column: 1;
+}
+
+.opmap-row[data-side='right'] .opmap-card {
+  grid-column: 3;
+}
+
+
+/* ── Pins ─────────────────────────────────────────────────────────────── */
+
+/*
+ * The pin box is exactly the size of the dot and centred on --pin-x, so the
+ * measured attachment point is the dot itself. The number hangs off it
+ * absolutely rather than sharing a flex row, which would drag the centre.
+ */
+.opmap-pin {
+  position: absolute;
+  top: 5rem;
+  left: var(--pin-x, 50%);
+  width: 11px;
+  height: 11px;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+/* Above the dot rather than beside it: on the inner edge of the gutter a
+   side-set label collides with the card's own tag. */
+.opmap-pin-no {
+  position: absolute;
+  bottom: calc(100% + 0.75rem);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.opmap-pin-head {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--smoke);
+  background: var(--void);
+  transition:
+    background-color var(--dur-mid) var(--ease-out),
+    border-color var(--dur-mid) var(--ease-out),
+    box-shadow var(--dur-mid) var(--ease-out);
+}
+
+.opmap-pin.is-reached .opmap-pin-head {
+  background: var(--signal);
+  border-color: var(--signal);
+  /* A pin-head catching light, not a glow. */
+  box-shadow: 0 0 0 4px rgba(196, 22, 28, 0.14);
+}
+
+.opmap-pin-no {
+  color: var(--graphite);
+  transition: color var(--dur-mid) var(--ease-out);
+}
+
+.opmap-pin.is-reached .opmap-pin-no {
+  color: var(--smoke);
+}
+
+/* ── Cards ────────────────────────────────────────────────────────────── */
+
+.opmap-card {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+
+.opmap-row.is-reached .opmap-card {
+  opacity: 1;
+  transform: none;
+}
+
+.opmap-card-head {
+  margin-bottom: 1.5rem;
+}
+
+.opmap-tag {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--graphite);
+  transition: color var(--dur-mid) var(--ease-out);
+}
+
+.opmap-row.is-reached .opmap-tag {
+  color: var(--smoke);
+}
+
+.opmap-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 88%;
+  font-size: var(--step-4);
+  letter-spacing: -0.035em;
+  line-height: 0.96;
+  text-transform: uppercase;
+  color: var(--bone);
+  margin: 0;
+  transition: letter-spacing var(--dur-mid) var(--ease-out);
+}
+
+.opmap-card:hover .opmap-title {
+  letter-spacing: -0.022em;
+}
+
+/* ── Image ────────────────────────────────────────────────────────────── */
+
+.opmap-frame {
+  overflow: hidden;
+  border: var(--rule);
+  background: var(--ink);
+  margin-bottom: 1.75rem;
+}
+
+.opmap-frame img {
+  display: block;
+  width: 100%;
+  /* Reserve the box before the lazy image loads, so the measured pin
+     positions do not shift underneath the string. */
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  /* Full colour. The movement is a slow push-in, not a desaturation. */
+  transform: scale(1.02);
+  transition: transform 1.1s var(--ease-out);
+}
+
+.opmap-row.is-reached .opmap-frame img {
+  transform: scale(1);
+}
+
+.opmap-card:hover .opmap-frame img {
+  transform: scale(1.07);
+}
+
+.opmap-plate {
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  color: var(--graphite);
+  letter-spacing: 0.22em;
+}
+
+/* ── Meta ─────────────────────────────────────────────────────────────── */
+
+.opmap-desc {
+  margin: 0;
+}
+
+.opmap-tech {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+}
+
+.opmap-links {
+  display: flex;
+  gap: 1.75rem;
+  margin-top: 1.75rem;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+
+@media (max-width: 1023px) {
+  /* One column: the string runs down the left margin and the cards sit
+     beside it, rather than weaving between two columns. */
+  .opmap-row,
+  .opmap-row[data-side='left'],
+  .opmap-row[data-side='right'] {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 3rem 0;
+    min-height: 0;
+  }
+
+  .opmap-row[data-side='left'] .opmap-card,
+  .opmap-row[data-side='right'] .opmap-card {
+    grid-column: 1;
+    padding-left: 3.25rem;
+    padding-right: 0;
+  }
+
+  .opmap-row[data-side='left'] .opmap-pin-no,
+  .opmap-pin-no {
+    left: 1.5rem;
+    right: auto;
+  }
+
+  .opmap-pin {
+    top: 3rem;
+    --pin-x: 0.65rem;
+  }
+
+  .opmap-pin-no {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .opmap {
+    background-size: 48px 48px;
+  }
+
+  .opmap-links {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opmap-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .opmap-frame img,
+  .opmap-card:hover .opmap-frame img,
+  .opmap-row.is-reached .opmap-frame img {
+    transform: none;
+    transition: none;
+  }
+}

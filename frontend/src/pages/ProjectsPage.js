@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import '../styles/ProjectsPage.css';
 import { buildApiUrl } from '../config/api';
-import CaseFileRow from '../components/CaseFileRow';
+import ProjectMap from '../components/ProjectMap';
 import { FaFolder } from 'react-icons/fa';
 
 function ProjectsPage() {
@@ -57,7 +57,7 @@ function ProjectsPage() {
     <div className="projects-page">
       <div className={`projects-container ${isVisible ? 'fade-in' : ''}`}>
         <header className="page-head">
-          <span className="t-mono">Selected operations</span>
+          <span className="t-mono">Field map · {projects.length || '—'} sites</span>
           <h1 className="page-title">Projects</h1>
           <p className="t-body page-subtitle">
             Showcasing my work in technology and innovation
@@ -75,11 +75,7 @@ function ProjectsPage() {
             <FaFolder aria-hidden="true" /> No projects available at the moment.
           </div>
         ) : (
-          <div className="case-files">
-            {ordered.map((project, index) => (
-              <CaseFileRow key={project._id} project={project} index={index} />
-            ))}
-          </div>
+          <ProjectMap projects={ordered} />
         )}
       </div>
     </div>

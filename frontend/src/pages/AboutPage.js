@@ -68,7 +68,6 @@ const SECTIONS = [
 function AboutPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState('whoIAm');
-  const [isFlipped, setIsFlipped] = useState(false);
 
   const [titleRef, titleIn] = useInView({ threshold: 0.3 });
   const [profileRef, profileIn] = useInView({ threshold: 0.25 });
@@ -82,8 +81,6 @@ function AboutPage() {
   const toggleSection = (section) => {
     setActiveSection((current) => (current === section ? null : section));
   };
-
-  const toggleFlip = () => setIsFlipped((v) => !v);
 
   return (
     <div className="about-page">
@@ -103,25 +100,17 @@ function AboutPage() {
             ref={profileRef}
             className={`about-image-container ${profileIn ? 'element-visible' : ''}`}
           >
-            <div
-              className={`flip-card ${isFlipped ? 'flipped' : ''}`}
-              onClick={toggleFlip}
-              onKeyDown={(e) => e.key === 'Enter' && toggleFlip()}
-              tabIndex={0}
-              role="button"
-              aria-label="Flip profile card"
-            >
-              <div className="flip-card-inner">
-                <div className="flip-card-front">
-                  <img src="/profile-imag.jpeg" alt="Profile" className="about-image" loading="lazy" />
-                </div>
-                <div className="flip-card-back">
-                  <h3>Adithya V Holla</h3>
-                  <p>AI Developer &amp; Enthusiast</p>
-                  <p className="t-mono flip-hint">Click to flip</p>
-                </div>
+            <figure className="portrait">
+              <div className="portrait-frame">
+                <img src="/profile-imag.jpeg" alt="Adithya V Holla" className="about-image" loading="lazy" />
               </div>
-            </div>
+              {/* The name and role that used to live on the back of the flip
+                  card now sit permanently under the portrait. */}
+              <figcaption className="portrait-caption">
+                <h3>Adithya V Holla</h3>
+                <p className="t-mono">AI Developer &amp; Enthusiast</p>
+              </figcaption>
+            </figure>
 
             <dl className="about-facts">
               <div>

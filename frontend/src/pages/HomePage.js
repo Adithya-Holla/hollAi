@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import '../styles/HomePage.css';
 import { buildApiUrl } from '../config/api';
 import RevealText from '../components/RevealText';
+import { useInView } from '../hooks/useInView';
 import { FaChevronDown, FaGithub, FaExternalLinkAlt, FaCode, FaFolder } from 'react-icons/fa';
 
 function HomePage() {
@@ -10,6 +11,28 @@ function HomePage() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { introPlaying, introTearing } = useOutletContext() || {};
+  // The gate opens the moment the screen starts tearing, so the hero reveal
+  // lands with the tear rather than queueing behind it.
+  const gateOpen = !introPlaying || introTearing;
+
+  /*
+   * The hero replays its entrance every time it comes back into view — on
+   * arriving from another page, and on scrolling back up to it. Bumping the
+   * cycle remounts the animated block, which restarts both the per-character
+   * reveal and the CSS light sweep.
+   *
+   * It is held back while the opening cinematic is still covering the page,
+   * so the reveal lands with the tear rather than finishing behind it.
+   */
+  const [heroRef, heroInView] = useInView({ threshold: 0.3, once: false });
+  const [heroCycle, setHeroCycle] = useState(0);
+
+  useEffect(() => {
+    if (!gateOpen || !heroInView) return;
+    setHeroCycle((c) => c + 1);
+  }, [heroInView, gateOpen]);
 
   useEffect(() => {
     // Fetch the first 3 projects from MongoDB
@@ -64,20 +87,23 @@ function HomePage() {
 
   return (
     <div className="home-page">
-      <section className="hero">
-        <span className="t-mono hero-eyebrow">Welcome to</span>
-        <h1 className="hero-text">
-          <span className="hero-solid">
-            <RevealText text="HOLL" delay={320} />
-          </span>
-          <span className="hero-ai">
-            <RevealText text="AI" delay={408} />
-          </span>
-        </h1>
-        <p className="t-body tagline">Lets Explore My Workspace</p>
-        <div className="hero-buttons">
-          <Link to="/projects" className="hero-button">My Projects</Link>
-          <Link to="/contact" className="hero-button">Contact Me</Link>
+      <section className="hero" ref={heroRef}>
+        {/* Remounted on each cycle so every entrance replays from the top. */}
+        <div className="hero-inner" key={heroCycle}>
+          <span className="t-mono hero-eyebrow">Welcome to</span>
+          <h1 className="hero-text">
+            <span className="hero-solid">
+              <RevealText text="HOLL" delay={320} active={heroCycle > 0} />
+            </span>
+            <span className="hero-ai">
+              <RevealText text="AI" delay={408} active={heroCycle > 0} />
+            </span>
+          </h1>
+          <p className="t-body tagline">Lets Explore My Workspace</p>
+          <div className="hero-buttons">
+            <Link to="/projects" className="hero-button">My Projects</Link>
+            <Link to="/contact" className="hero-button">Contact Me</Link>
+          </div>
         </div>
         <button
           className="scroll-down-button"

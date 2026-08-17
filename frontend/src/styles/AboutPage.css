@@ -53,78 +53,59 @@
 
 /* ── Portrait ─────────────────────────────────────────────────────────── */
 
-.flip-card {
-  perspective: 1200px;
-  cursor: pointer;
-  aspect-ratio: 4 / 5;
+.portrait {
+  margin: 0;
   width: 100%;
 }
 
-.flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.9s var(--ease-in-out);
-}
-
-.flip-card.flipped .flip-card-inner {
-  transform: rotateY(180deg);
-}
-
-.flip-card-front,
-.flip-card-back {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  border: var(--rule);
+/* Clipping frame, so the image can scale without escaping its border. */
+.portrait-frame {
   overflow: hidden;
-}
-
-.flip-card-back {
-  transform: rotateY(180deg);
+  border: var(--rule);
   background: var(--ink);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.35rem;
-  padding: 2rem;
 }
 
-.flip-card-back h3 {
+.about-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  /* Full colour. A slow scale gives the portrait life without a filter. */
+  transition: transform 1.1s var(--ease-out);
+}
+
+.portrait:hover .about-image {
+  transform: scale(1.03);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-image {
+    transition: none;
+  }
+
+  .portrait:hover .about-image {
+    transform: none;
+  }
+}
+
+.portrait-caption {
+  margin-top: 1.5rem;
+}
+
+.portrait-caption h3 {
   font-family: var(--font-display);
   font-weight: 900;
   font-stretch: 88%;
-  font-size: var(--step-3);
+  font-size: var(--step-2);
   letter-spacing: -0.03em;
   line-height: 1;
   text-transform: uppercase;
   color: var(--bone);
+  margin: 0 0 0.5rem;
+}
+
+.portrait-caption p {
   margin: 0;
-}
-
-.flip-card-back p {
-  margin: 0;
-  color: var(--smoke);
-  font-size: var(--step-0);
-}
-
-.flip-hint {
-  margin-top: 1rem !important;
-}
-
-.about-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  /* Duotone: the portrait resolves out of the grain rather than sitting on it. */
-  filter: grayscale(1) contrast(1.18) brightness(0.86);
-  transition: filter var(--dur-slow) var(--ease-out);
-}
-
-.flip-card:hover .about-image {
-  filter: grayscale(0.45) contrast(1.04) brightness(1);
 }
 
 .about-facts {

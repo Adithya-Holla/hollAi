@@ -10,7 +10,14 @@ import { useReducedMotion } from '../hooks/useReducedMotion';
  * accessibility tree, so a screen reader announces the word rather than
  * spelling it out.
  */
-function RevealText({ text, delay = 0, charDelay = 22, className = '', as: Tag = 'span' }) {
+function RevealText({
+  text,
+  delay = 0,
+  charDelay = 22,
+  className = '',
+  as: Tag = 'span',
+  active = true,
+}) {
   const ref = useRef(null);
   const reduced = useReducedMotion();
 
@@ -19,6 +26,14 @@ function RevealText({ text, delay = 0, charDelay = 22, className = '', as: Tag =
     if (!node) return undefined;
 
     const spans = node.querySelectorAll('[data-char]');
+
+    // Held closed until the caller opens the gate. Without this the reveal
+    // would run on mount — which, during the opening cinematic, means it
+    // finishes behind the black cover and the tear opens onto static text.
+    if (!active) {
+      spans.forEach((span) => span.classList.remove('is-in'));
+      return undefined;
+    }
 
     if (reduced) {
       spans.forEach((span) => span.classList.add('is-in'));
@@ -30,7 +45,7 @@ function RevealText({ text, delay = 0, charDelay = 22, className = '', as: Tag =
     );
 
     return () => timers.forEach(clearTimeout);
-  }, [delay, charDelay, reduced, text]);
+  }, [delay, charDelay, reduced, text, active]);
 
   return (
     <Tag ref={ref} className={className} aria-label={text}>

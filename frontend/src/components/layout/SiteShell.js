@@ -33,6 +33,7 @@ function SiteShell() {
     return q;
   }, []);
 
+  const [introTearing, setIntroTearing] = useState(false);
   const [introPlaying, setIntroPlaying] = useState(
     () =>
       window.location.pathname === '/' &&
@@ -80,7 +81,10 @@ function SiteShell() {
       <div className="site-content">
         <Navbar />
         <main id="main">
-          <Outlet />
+          {/* Pages need to know when the cinematic is still covering them, so
+              entrance animations do not play out behind the black cover —
+              and when the tear starts, so they can overlap it. */}
+          <Outlet context={{ introPlaying, introTearing }} />
         </main>
         <Footer />
       </div>
@@ -90,7 +94,11 @@ function SiteShell() {
 
       {introPlaying && (
         <React.Suspense fallback={<div className="intro-layer" />}>
-          <IntroSequence quality={quality} onComplete={handleIntroComplete} />
+          <IntroSequence
+            quality={quality}
+            onComplete={handleIntroComplete}
+            onTearStart={() => setIntroTearing(true)}
+          />
         </React.Suspense>
       )}
     </div>

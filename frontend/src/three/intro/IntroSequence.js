@@ -142,7 +142,7 @@ function IntroStage({ quality, reduced, onDone, onTear }) {
   );
 }
 
-function IntroSequence({ onComplete, quality }) {
+function IntroSequence({ onComplete, onTearStart, quality }) {
   const reduced = useReducedMotion();
   const [tearing, setTearing] = useState(false);
   const [showSkip, setShowSkip] = useState(false);
@@ -154,7 +154,12 @@ function IntroSequence({ onComplete, quality }) {
     onComplete();
   }, [onComplete]);
 
-  const handleTear = useCallback(() => setTearing(true), []);
+  const handleTear = useCallback(() => {
+    setTearing(true);
+    // The page below starts its own entrance now, so the hero reveal overlaps
+    // the tear instead of queueing behind it.
+    if (onTearStart) onTearStart();
+  }, [onTearStart]);
 
   useEffect(() => {
     const t = setTimeout(() => setShowSkip(true), 900);

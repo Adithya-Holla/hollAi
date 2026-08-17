@@ -1,3 +1,8 @@
+/*
+ * Page chrome only. The projects themselves are laid out as an operations
+ * map — see ProjectMap.css.
+ */
+
 .projects-container {
   padding: 11rem var(--gutter) 8rem;
   opacity: 0;
@@ -8,185 +13,13 @@
   opacity: 1;
 }
 
-/* ── Case files ───────────────────────────────────────────────────────── */
-
-.case-files {
-  display: flex;
-  flex-direction: column;
-}
-
-.case-file {
-  display: grid;
-  grid-template-columns: 6rem minmax(0, 1fr) minmax(0, 0.85fr);
-  gap: 3rem;
-  align-items: start;
-  padding: 4.5rem 0;
-  border-top: var(--rule);
-  opacity: 0;
-  transform: translateY(26px);
-  transition:
-    opacity var(--dur-slow) var(--ease-out),
-    transform var(--dur-slow) var(--ease-out),
-    border-color var(--dur-mid) var(--ease-out);
-}
-
-.case-file.is-in {
-  opacity: 1;
-  transform: none;
-}
-
-.case-file:hover {
-  border-top-color: var(--smoke);
-}
-
-.case-file--featured .case-index {
-  color: var(--smoke);
-  font-size: var(--step-3);
-}
-
-.case-index {
-  font-size: var(--step-2);
-  color: var(--graphite);
-  line-height: 1;
-  transition: color var(--dur-mid) var(--ease-out);
-}
-
-.case-file:hover .case-index {
-  color: var(--signal);
-}
-
-.case-flag {
-  display: block;
-  margin-bottom: 0.9rem;
-  color: var(--smoke);
-}
-
-.case-title {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-stretch: 88%;
-  font-size: var(--step-4);
-  letter-spacing: -0.035em;
-  line-height: 0.96;
-  text-transform: uppercase;
-  color: var(--bone);
-  margin: 0 0 1.1rem;
-  transition: letter-spacing var(--dur-mid) var(--ease-out);
-}
-
-.case-file:hover .case-title {
-  letter-spacing: -0.022em;
-}
-
-.case-description {
-  margin: 0;
-}
-
-.case-tech {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  margin: 1.75rem 0 0;
-  padding: 0;
-}
-
-.case-links {
-  display: flex;
-  gap: 1.75rem;
-  margin-top: 1.75rem;
-}
-
-/* ── Visual ───────────────────────────────────────────────────────────── */
-
-.case-visual {
-  overflow: hidden;
-}
-
-.case-visual img {
-  width: 100%;
-  display: block;
-  /* Reserve the box before the lazy image loads. Without an aspect-ratio an
-     unloaded image is 0px tall and the whole page reflows when it arrives. */
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  background: var(--ink);
-  filter: grayscale(1) contrast(1.1);
-  clip-path: inset(0 0 100% 0);
-  transition:
-    clip-path 1s var(--ease-out) 0.15s,
-    transform var(--dur-mid) var(--ease-out),
-    filter var(--dur-mid) var(--ease-out);
-}
-
-.case-file.is-in .case-visual img {
-  clip-path: inset(0 0 0 0);
-}
-
-.case-file:hover .case-visual img {
-  transform: translateY(-8px);
-  filter: grayscale(0.35) contrast(1.03);
-}
-
-.case-plate {
-  aspect-ratio: 16 / 10;
-  display: grid;
-  place-items: center;
-  border: var(--rule);
-  color: var(--graphite);
-  font-size: var(--step-0);
-  letter-spacing: 0.22em;
-  transition: color var(--dur-mid) var(--ease-out), border-color var(--dur-mid) var(--ease-out);
-}
-
-.case-file:hover .case-plate {
-  color: var(--smoke);
-  border-color: var(--smoke);
-}
-
-/* ── Responsive ───────────────────────────────────────────────────────── */
-
-@media (max-width: 1023px) {
-  .case-file {
-    grid-template-columns: 4rem 1fr;
-    gap: 1.25rem 1.5rem;
-    padding: 3rem 0;
-  }
-
-  .case-visual {
-    grid-column: 1 / -1;
-    margin-top: 1.75rem;
-  }
-}
-
 @media (max-width: 767px) {
   .projects-container {
     padding: 7rem var(--gutter) 5rem;
   }
-
-  .case-file {
-    grid-template-columns: 3rem 1fr;
-  }
-
-  .case-links {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .case-file {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .case-visual img {
-    clip-path: none;
-    transition: none;
-  }
-
   .projects-container {
     opacity: 1;
     transition: none;
