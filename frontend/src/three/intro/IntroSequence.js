@@ -9,8 +9,13 @@ import '../../styles/Intro.css';
 
 RectAreaLightUniformsLib.init();
 
+/** The split begins drawing itself. */
 export const TEAR_AT = 3.2;
-export const TOTAL = 4.2;
+/** How long the split takes to travel corner to corner. */
+const SEAM_DRAW = 1.35;
+/** A held beat at full length, then the halves start moving. */
+const SPLIT_AT = TEAR_AT + SEAM_DRAW + 0.25;
+export const TOTAL = SPLIT_AT + 1.4;
 const TEAR_DEPTH = -1.6;
 
 /** Resting opacity per eye layer once the emergence beat finishes. */
@@ -79,26 +84,54 @@ function IntroStage({ quality, reduced, onDone, onTear }) {
     tl.to(eyes.scale, { x: 1, y: 1, duration: 0.34, ease: 'power2.inOut' }, 2.5);
 
     // 3.0 – 3.2 · hold. The stillness is what makes the tear land.
-    tl.call(onTear, undefined, TEAR_AT);
+
+    /*
+     * Fired when the halves actually start moving, not when the split starts
+     * drawing. This both drops the layer's black background — so the site
+     * shows through the widening gap — and opens the hero's gate, so the
+     * wordmark reveals against the separation rather than during the draw.
+     */
+    tl.call(onTear, undefined, SPLIT_AT);
 
     // 3.2 – 4.2 · the tear
     const lower = lowerRef.current;
     const upper = upperRef.current;
-    if (lower && upper) {
-      tl.to(lower.position, { x: -1.15, y: -0.8, z: 0.5, duration: 1, ease: 'power3.in' }, TEAR_AT);
-      tl.to(lower.rotation, { z: -0.03, duration: 1, ease: 'power2.in' }, TEAR_AT);
-      tl.to(upper.position, { x: 1.15, y: 0.8, z: 0.5, duration: 1, ease: 'power3.in' }, TEAR_AT);
-      tl.to(upper.rotation, { z: 0.03, duration: 1, ease: 'power2.in' }, TEAR_AT);
-    }
+
+    /*
+     * The split is now its own beat rather than a flash before the halves
+     * move. It propagates across the screen over SEAM_DRAW seconds, holds a
+     * moment at full length, and only then does anything separate.
+     */
     if (lowerMat.current && upperMat.current) {
-      const gaps = [lowerMat.current.uniforms.uGap, upperMat.current.uniforms.uGap];
-      tl.to(gaps, { value: 1, duration: 0.14, ease: 'power2.out' }, TEAR_AT);
-      tl.to(gaps, { value: 0, duration: 0.8, ease: 'power2.in' }, TEAR_AT + 0.16);
+      const reveal = [lowerMat.current.uniforms.uReveal, upperMat.current.uniforms.uReveal];
+      const heat = [lowerMat.current.uniforms.uHeat, upperMat.current.uniforms.uHeat];
+
+      tl.fromTo(heat, { value: 0 }, { value: 1, duration: 0.3, ease: 'power1.out' }, TEAR_AT);
+      tl.fromTo(
+        reveal,
+        { value: 0 },
+        // Slightly past 1 so the leading point runs off the far corner
+        // instead of stopping dead on it.
+        { value: 1.06, duration: SEAM_DRAW, ease: 'power1.inOut' },
+        TEAR_AT
+      );
+      // Fades out over the whole separation rather than snapping off.
+      tl.to(heat, { value: 0, duration: 1.1, ease: 'power2.in' }, SPLIT_AT + 0.25);
     }
+
+    if (lower && upper) {
+      // Longer and gentler than before: power2.in over 1.4s reads as a
+      // surface being pulled apart, where a hard power3.in read as a snap.
+      tl.to(lower.position, { x: -1.25, y: -0.88, z: 0.5, duration: 1.4, ease: 'power2.in' }, SPLIT_AT);
+      tl.to(lower.rotation, { z: -0.034, duration: 1.4, ease: 'power1.in' }, SPLIT_AT);
+      tl.to(upper.position, { x: 1.25, y: 0.88, z: 0.5, duration: 1.4, ease: 'power2.in' }, SPLIT_AT);
+      tl.to(upper.rotation, { z: 0.034, duration: 1.4, ease: 'power1.in' }, SPLIT_AT);
+    }
+
     // The camera passes through the glasses as the cover peels away: they
     // rush toward the lens and out of frame rather than shrinking away.
-    tl.to(specs.scale, { x: 2.6, y: 2.6, z: 2.6, duration: 1, ease: 'power3.in' }, TEAR_AT);
-    tl.to(specs.position, { z: 2.3, duration: 1, ease: 'power3.in' }, TEAR_AT);
+    tl.to(specs.scale, { x: 2.6, y: 2.6, z: 2.6, duration: 1.4, ease: 'power2.in' }, SPLIT_AT);
+    tl.to(specs.position, { z: 2.3, duration: 1.4, ease: 'power2.in' }, SPLIT_AT);
 
     if (process.env.NODE_ENV !== 'production') {
       window.__introTimeline = tl;

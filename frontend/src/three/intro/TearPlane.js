@@ -36,27 +36,44 @@ const vertexShader = `
 `;
 
 /*
- * uGap drives the hot rim along the torn edge: white at the core falling off
- * into --signal red, dying as the halves separate.
+ * The seam draws itself before anything moves.
+ *
+ * `uReveal` is how far the split has travelled along the diagonal, 0 at the
+ * top-left corner and 1 at the bottom-right. Only the drawn portion lights
+ * up, and a hot point rides the leading end, so the tear reads as something
+ * propagating through a surface rather than a line switching on.
+ *
+ * `uHeat` is the overall brightness, faded down as the halves separate.
  *
  * Distance to the diagonal stands in for distance to the seam itself — at
  * this amplitude the two are within a few percent, and it costs one dot
  * product instead of sampling the polyline per fragment.
  */
 const fragmentShader = `
-  uniform float uGap;
+  uniform float uReveal;
+  uniform float uHeat;
   uniform vec3  uSignal;
   varying vec2 vPos;
 
   void main() {
     float d = abs(vPos.x + vPos.y) * 0.70710678;
+    float along = (vPos.x - vPos.y + 2.0) * 0.25;
+
+    // Everything behind the leading end, with a soft trailing edge.
+    float drawn = 1.0 - smoothstep(uReveal, uReveal + 0.045, along);
+
+    // A brighter point riding the split as it travels.
+    float tip = exp(-pow((along - uReveal) / 0.03, 2.0));
 
     // A thin hot line, not a band. Anything wider reads as neon.
     float rim  = 1.0 - smoothstep(0.0, 0.006, d);
     float halo = 1.0 - smoothstep(0.0, 0.030, d);
 
-    vec3 color = uSignal * pow(halo, 1.8) * 0.32 + vec3(1.0) * pow(rim, 3.0) * 0.9;
-    gl_FragColor = vec4(color * uGap, 1.0);
+    vec3 color = uSignal * pow(halo, 1.8) * 0.32 * drawn
+               + vec3(1.0) * pow(rim, 3.0) * 0.9 * drawn
+               + vec3(1.0) * tip * halo * 1.1;
+
+    gl_FragColor = vec4(color * uHeat, 1.0);
   }
 `;
 
@@ -93,7 +110,8 @@ function TearHalf({ side, groupRef, materialRef, depth = 0 }) {
 
   const uniforms = useMemo(
     () => ({
-      uGap: { value: 0 },
+      uReveal: { value: 0 },
+      uHeat: { value: 0 },
       uSignal: { value: new THREE.Color('#C4161C') },
     }),
     []

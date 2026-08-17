@@ -48,8 +48,8 @@ function HomeAmbient({ quality }) {
   const groupRef = useRef();
   const lightRef = useRef();
 
-  const geometryL = useMemo(() => frameGeometry(-CX, 0.02, 120), []);
-  const geometryR = useMemo(() => frameGeometry(CX, 0.02, 120), []);
+  const geometryL = useMemo(() => frameGeometry(-CX, 0.034, 140), []);
+  const geometryR = useMemo(() => frameGeometry(CX, 0.034, 140), []);
   const lensL = useMemo(() => lensGeometry(-CX), []);
   const lensR = useMemo(() => lensGeometry(CX), []);
   // Populated by the LensSweep children with their actual materials.
@@ -64,7 +64,9 @@ function HomeAmbient({ quality }) {
 
     // A slow turn that never completes: the figure shifts its weight rather
     // than spinning. Two frequencies so the motion does not visibly loop.
-    group.rotation.y = Math.sin(t * 0.13) * 0.55 + Math.sin(t * 0.041) * 0.2;
+    // Capped around 28°: beyond that the far lens turns nearly edge-on and
+    // the pair stops reading as spectacles.
+    group.rotation.y = Math.sin(t * 0.13) * 0.36 + Math.sin(t * 0.041) * 0.13;
     group.rotation.x = Math.sin(t * 0.095) * 0.09;
     group.rotation.z = Math.sin(t * 0.061) * 0.04;
     group.position.y = 2.5 + Math.sin(t * 0.15) * 0.28;
@@ -128,10 +130,18 @@ function HomeAmbient({ quality }) {
    */
   const material = (
     <meshStandardMaterial
-      color="#6a6a7e"
-      roughness={0.34}
-      metalness={0.5}
-      envMapIntensity={4}
+      color="#9aa0b4"
+      roughness={0.38}
+      metalness={0.3}
+      envMapIntensity={3}
+      /*
+       * A low emissive floor so the frame never drops to pure black as the
+       * object turns away from its light. This is what keeps the silhouette
+       * continuously readable; without it the outline breaks up whenever the
+       * key light falls off an edge.
+       */
+      emissive="#414a63"
+      emissiveIntensity={0.7}
     />
   );
 
@@ -172,7 +182,7 @@ function HomeAmbient({ quality }) {
 
       {/* Bridge, so the two lenses read as one object. */}
       <mesh position={[0, 0.05, 0]}>
-        <boxGeometry args={[0.18, 0.018, 0.018]} />
+        <boxGeometry args={[0.18, 0.03, 0.03]} />
         {material}
       </mesh>
 
