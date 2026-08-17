@@ -55,12 +55,28 @@ function ContactPage() {
         throw new Error('Failed to send message');
       }
 
+      /*
+       * A 2xx here does not mean the message reached an inbox.
+       *
+       * The API stores the message and then tries to email a notification.
+       * When that send fails it logs the failure and STILL returns 201, with
+       * a different `message` — so checking response.ok alone reports success
+       * for messages that were never delivered. The body is the only thing
+       * that distinguishes the two.
+       */
+      const data = await response.json().catch(() => ({}));
+      const delivered = /sent successfully/i.test(data.message || '');
+
       setFormStatus({
-        submitted: true,
-        error: false,
-        message: 'Message sent successfully!'
+        // `submitted` also disables the button, so an undelivered message
+        // leaves the form usable rather than locking it.
+        submitted: delivered,
+        error: !delivered,
+        message: delivered
+          ? 'Message sent successfully!'
+          : 'Saved, but the email notification failed — please reach me directly at adithyavholla23@gmail.com.'
       });
-      
+
       // Clear form
       setFormData({
         name: '',
@@ -69,14 +85,16 @@ function ContactPage() {
         message: ''
       });
 
-      // Reset form status after 3 seconds
-      setTimeout(() => {
-        setFormStatus({
-          submitted: false,
-          error: false,
-          message: ''
-        });
-      }, 3000);
+      // Undelivered messages leave their notice up; a success clears itself.
+      if (delivered) {
+        setTimeout(() => {
+          setFormStatus({
+            submitted: false,
+            error: false,
+            message: ''
+          });
+        }, 3000);
+      }
 
     } catch (error) {
       console.error('Error sending message:', error);
