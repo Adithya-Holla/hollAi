@@ -7,6 +7,9 @@ export const MOBILE_BREAKPOINT = 768;
  *   low    — shader spectacles, no area light, no light shaft, dpr [1,1.5]
  *   static — one frame, then frozen (or no canvas at all without WebGL)
  *
+ * Deliberately does not read prefers-reduced-motion: the intro and ambient
+ * scene always run at full motion regardless of the OS preference.
+ *
  * Safari does not implement navigator.deviceMemory, so an absent value is
  * treated as capable rather than weak — otherwise every Mac would be demoted.
  */
@@ -14,10 +17,9 @@ export function resolveQuality({
   deviceMemory,
   hardwareConcurrency,
   width,
-  prefersReducedMotion,
   hasWebGL,
 }) {
-  if (prefersReducedMotion || !hasWebGL) return 'static';
+  if (!hasWebGL) return 'static';
   if (width < MOBILE_BREAKPOINT) return 'low';
   if (typeof deviceMemory === 'number' && deviceMemory <= 4) return 'low';
   if (typeof hardwareConcurrency === 'number' && hardwareConcurrency <= 4) return 'low';
@@ -39,7 +41,6 @@ export function resolveQualityFromEnvironment() {
     deviceMemory: navigator.deviceMemory,
     hardwareConcurrency: navigator.hardwareConcurrency,
     width: window.innerWidth,
-    prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     hasWebGL: detectWebGL(),
   });
 }

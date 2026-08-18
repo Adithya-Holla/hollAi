@@ -23,15 +23,6 @@
   will-change: auto;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .reveal-char {
-    filter: none;
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
 /* ── Hero ─────────────────────────────────────────────────────────────── */
 
 .hero {
@@ -57,14 +48,6 @@
 @keyframes hero-rise {
   from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-eyebrow,
-  .tagline,
-  .hero-buttons {
-    animation: none;
-  }
 }
 
 .hero-eyebrow {
@@ -122,15 +105,6 @@
 
 @keyframes hero-sweep {
   to { background-position: -60% 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-solid {
-    background-image: none;
-    -webkit-text-fill-color: var(--bone);
-    color: var(--bone);
-    animation: none;
-  }
 }
 
 /* AI is outlined rather than filled — a distinction, not a logo. */

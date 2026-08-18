@@ -4,17 +4,12 @@ const desktop = {
   deviceMemory: 8,
   hardwareConcurrency: 8,
   width: 1920,
-  prefersReducedMotion: false,
   hasWebGL: true,
 };
 
 describe('resolveQuality', () => {
   test('gives a capable desktop the full experience', () => {
     expect(resolveQuality(desktop)).toBe('high');
-  });
-
-  test('reduced motion wins over every capability signal', () => {
-    expect(resolveQuality({ ...desktop, prefersReducedMotion: true })).toBe('static');
   });
 
   test('no WebGL means static regardless of hardware', () => {
@@ -40,7 +35,7 @@ describe('resolveQuality', () => {
   test('assumes capable hardware when the browser reports nothing', () => {
     // Safari does not implement deviceMemory. Treating "unknown" as "weak"
     // would demote every Mac visitor.
-    const unknown = { width: 1440, prefersReducedMotion: false, hasWebGL: true };
+    const unknown = { width: 1440, hasWebGL: true };
     expect(resolveQuality(unknown)).toBe('high');
   });
 });

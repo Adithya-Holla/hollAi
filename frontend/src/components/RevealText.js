@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 
 /**
  * Per-character reveal that resolves each glyph out of blur rather than
@@ -19,7 +18,6 @@ function RevealText({
   active = true,
 }) {
   const ref = useRef(null);
-  const reduced = useReducedMotion();
 
   useEffect(() => {
     const node = ref.current;
@@ -35,17 +33,12 @@ function RevealText({
       return undefined;
     }
 
-    if (reduced) {
-      spans.forEach((span) => span.classList.add('is-in'));
-      return undefined;
-    }
-
     const timers = Array.from(spans).map((span, i) =>
       setTimeout(() => span.classList.add('is-in'), delay + i * charDelay)
     );
 
     return () => timers.forEach(clearTimeout);
-  }, [delay, charDelay, reduced, text, active]);
+  }, [delay, charDelay, text, active]);
 
   return (
     <Tag ref={ref} className={className} aria-label={text}>

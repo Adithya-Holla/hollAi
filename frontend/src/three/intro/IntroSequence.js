@@ -4,7 +4,6 @@ import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLigh
 import gsap from 'gsap';
 import Spectacles from './Spectacles';
 import TearHalf from './TearPlane';
-import { useReducedMotion } from '../../hooks/useReducedMotion';
 import '../../styles/Intro.css';
 
 RectAreaLightUniformsLib.init();
@@ -219,7 +218,9 @@ function IntroStage({ quality, reduced, onDone, onTear }) {
 }
 
 function IntroSequence({ onComplete, onTearStart, quality }) {
-  const reduced = useReducedMotion();
+  // Always the full cinematic: the site does not honor prefers-reduced-motion
+  // for the intro or the ambient scene.
+  const reduced = false;
   const [tearing, setTearing] = useState(false);
   const [showSkip, setShowSkip] = useState(false);
   const finished = useRef(false);
