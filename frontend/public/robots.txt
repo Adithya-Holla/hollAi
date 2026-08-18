@@ -1,3 +1,6 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /admin/login
+
+Sitemap: https://hollai.onrender.com/sitemap.xml
