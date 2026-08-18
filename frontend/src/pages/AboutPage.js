@@ -3,8 +3,8 @@ import '../styles/AboutPage.css';
 import { useInView } from '../hooks/useInView';
 
 /**
- * Section copy is unchanged from the original page — only its presentation
- * has been redesigned. Do not rewrite these strings.
+ * Section copy carries over from the original page's presentation redesign,
+ * with spelling fixes only — wording is otherwise unchanged.
  */
 const SECTIONS = [
   {
@@ -45,7 +45,7 @@ const SECTIONS = [
     title: 'My Education',
     body: (
       <p className="t-body">
-        Currently persuing Btech degree from PES University, RR campur, Banglore, Karnataka, India.
+        Currently pursuing a B.Tech degree from PES University, RR Campus, Bangalore, Karnataka, India.
         <br /><br />
         Excelled in Creative PU College, with an amazing 98% in boards and 201 rank in KCET.
         <br /><br />
