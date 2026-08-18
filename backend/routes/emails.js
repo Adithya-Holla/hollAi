@@ -1,15 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Email = require('../models/Email');
+const auth = require('../middleware/auth');
 const { sendContactEmail } = require('../utils/emailService');
 
 // Submit new contact message
 router.post('/contact', async (req, res) => {
-  console.log('Received contact form submission:', {
-    body: req.body,
-    headers: req.headers,
-    ip: req.ip
-  });
+  console.log('Received contact form submission from:', req.ip);
 
   try {
     const { name, email, subject, message } = req.body;
@@ -104,21 +101,17 @@ router.post('/contact', async (req, res) => {
         stack: error.stack,
         code: error.code
       },
-      request: {
-        body: req.body,
-        headers: req.headers,
-        ip: req.ip
-      }
+      ip: req.ip
     });
-    res.status(500).json({ 
-      message: 'Error processing your message', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Error processing your message',
+      error: error.message
     });
   }
 });
 
 // Get all emails
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     console.log('Fetching all emails');
     const emails = await Email.find().sort({ createdAt: -1 });
@@ -137,7 +130,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get email by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
   try {
     console.log('Fetching email by ID:', req.params.id);
     const email = await Email.findById(req.params.id);
@@ -163,7 +156,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Get emails by status
-router.get('/status/:status', async (req, res) => {
+router.get('/status/:status', auth, async (req, res) => {
   try {
     const { status } = req.params;
     console.log('Fetching emails by status:', status);

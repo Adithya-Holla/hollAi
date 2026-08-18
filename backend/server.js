@@ -75,8 +75,11 @@ mongoose.connect(process.env.MONGODB_URI, {
   });
 });
 
-// Database connection test endpoint
+// Database connection test endpoint (local debugging only)
 app.get('/api/db-test', async (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ message: 'Not found' });
+  }
   try {
     // Check if connected
     if (mongoose.connection.readyState !== 1) {
@@ -123,7 +126,6 @@ app.get('/', (req, res) => {
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const emailsRoutes = require('./routes/emails');
-const testRoutes = require('./routes/test');
 const certificationRoutes = require('./routes/certifications');
 const uploadRoutes = require('./routes/upload');
 
@@ -131,7 +133,6 @@ app.use('/api/auth/login', loginLimiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/emails', emailsRoutes);
-app.use('/api/test-db', testRoutes);
 app.use('/api/certifications', certificationRoutes);
 app.use('/api/upload', uploadRoutes);
 
