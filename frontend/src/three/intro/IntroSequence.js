@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import gsap from 'gsap';
 import Spectacles from './Spectacles';
@@ -8,6 +8,33 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import '../../styles/Intro.css';
 
 RectAreaLightUniformsLib.init();
+
+/** The vertical fov the scene was framed at, and the aspect it assumes. */
+const BASE_FOV = 40;
+const BASE_ASPECT = 16 / 10;
+
+/**
+ * A fixed vertical fov reads as a fixed HORIZONTAL fov only at the aspect it
+ * was tuned for. On a narrow portrait screen the same vertical fov keeps a
+ * far smaller horizontal slice in frame, so the glasses — sized in fixed
+ * world units — blow past the edges. This holds the horizontal fov roughly
+ * constant instead, widening the vertical fov as the aspect narrows.
+ */
+function FitCamera() {
+  const camera = useThree((s) => s.camera);
+  const size = useThree((s) => s.size);
+
+  useEffect(() => {
+    const aspect = size.width / size.height;
+    const baseVFov = (BASE_FOV * Math.PI) / 180;
+    const hFov = 2 * Math.atan(Math.tan(baseVFov / 2) * BASE_ASPECT);
+    const vFov = 2 * Math.atan(Math.tan(hFov / 2) / aspect);
+    camera.fov = Math.min(100, Math.max(BASE_FOV, (vFov * 180) / Math.PI));
+    camera.updateProjectionMatrix();
+  }, [camera, size]);
+
+  return null;
+}
 
 /** The split begins drawing itself. */
 export const TEAR_AT = 3.2;
@@ -230,6 +257,7 @@ function IntroSequence({ onComplete, onTearStart, quality }) {
           camera={{ position: [0, 0, 2.0], fov: 40 }}
           gl={{ alpha: true, antialias: quality === 'high' }}
         >
+          <FitCamera />
           <IntroStage
             quality={quality}
             reduced={reduced}
