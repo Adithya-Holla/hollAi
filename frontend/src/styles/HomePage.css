@@ -98,19 +98,22 @@
   -webkit-text-fill-color: transparent;
   color: transparent;
   animation: hero-sweep 1.15s var(--ease-in-out) 1.25s 1 both;
-  /*
-   * Own compositing layer. Without it, the blur-filtered .reveal-char
-   * children (see below) get layer-promoted independently while their
-   * filter transitions, and on some mobile GPUs that detaches them from
-   * this element's text-clipped background — the glyphs render fully
-   * transparent and never repaint even once the filter settles.
-   */
-  isolation: isolate;
-  transform: translateZ(0);
 }
 
 @keyframes hero-sweep {
   to { background-position: -60% 0; }
+}
+
+/*
+ * These letters never blur. A filter transition on a descendant of a
+ * background-clip: text element is a real GPU-compositing landmine —
+ * depending on the browser it either leaves the clipped gradient
+ * permanently unpainted, or leaves a stale, wrongly-scaled raster of the
+ * glyphs on screen. AI never hits this: it's a plain stroke, not a clip
+ * mask, so it keeps the blur reveal.
+ */
+.hero-solid .reveal-char {
+  filter: none;
 }
 
 /* AI is outlined rather than filled — a distinction, not a logo. */
