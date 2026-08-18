@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141416"/>
+      <stop offset="100%" stop-color="#08080a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="15" fill="url(#bg)"/>
+
+  <!-- temples -->
+  <path d="M4 25 L9 23.5" stroke="#e8e6e1" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M60 25 L55 23.5" stroke="#e8e6e1" stroke-width="2.6" stroke-linecap="round"/>
+
+  <!-- bridge -->
+  <path d="M28 27 Q32 24 36 27" fill="none" stroke="#e8e6e1" stroke-width="2.6" stroke-linecap="round"/>
+
+  <!-- lenses: dark glass, bone rim -->
+  <rect x="8" y="22" width="20" height="16" rx="5" fill="#0c0c0e" stroke="#e8e6e1" stroke-width="2.4"/>
+  <rect x="36" y="22" width="20" height="16" rx="5" fill="#0c0c0e" stroke="#e8e6e1" stroke-width="2.4"/>
+
+  <!-- the sweep light, caught as a glint on each lens -->
+  <path d="M12.5 27 L20 24" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+  <path d="M40.5 27 L48 24" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+</svg>
