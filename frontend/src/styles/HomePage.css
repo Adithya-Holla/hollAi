@@ -127,6 +127,7 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-solid {
     background-image: none;
+    -webkit-text-fill-color: var(--bone);
     color: var(--bone);
     animation: none;
   }
